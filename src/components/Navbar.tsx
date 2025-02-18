@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Header from "./Header";
-import { FiSearch, FiBell, FiShoppingCart, FiUser } from "react-icons/fi";
+import { FiSearch, FiBell, FiUser, FiBox } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import CartIcon from "./components/CartIcon";
+import CartIcon from "./CartIcon"; // Import the CartIcon component
 
 const NAV_CLASS =
   "absolute top-0 left-0 w-full p-4 flex justify-between items-center text-primary-foreground z-20";
@@ -10,7 +10,12 @@ const LINK_CLASS = "hover:underline";
 
 const Navbar: React.FC = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
-  const [isSearchVisible, setIsSearchVisible] = useState(false); // Added this line
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isSearchHovered, setIsSearchHovered] = useState(false);
+  const [isProductHovered, setIsProductHovered] = useState(false);
+  const [isNotificationHovered, setIsNotificationHovered] = useState(false);
+  const [isCartHovered, setIsCartHovered] = useState(false);
+  const [isUserHovered, setIsUserHovered] = useState(false);
 
   const handleMouseEnter = () => setIsHeaderVisible(true);
   const handleMouseLeave = () => setIsHeaderVisible(false);
@@ -21,10 +26,6 @@ const Navbar: React.FC = () => {
 
   const handleNotificationClick = () => {
     alert("You clicked the notification icon!");
-  };
-
-  const handleCartClick = () => {
-    alert("You click the cart icon");
   };
 
   return (
@@ -50,49 +51,117 @@ const Navbar: React.FC = () => {
           style={{ right: "150px" }}
         >
           {/* Search Bar Icon */}
-          <li className="relative">
+          <li
+            className="relative"
+            onMouseEnter={() => setIsSearchHovered(true)}
+            onMouseLeave={() => setIsSearchHovered(false)}
+          >
             <a href="#" onClick={toggleSearch}>
               <FiSearch size={20} />
             </a>
-            {isSearchVisible && (
-              <div
-                className="absolute top-10 left-0 bg-white text-black p-2 rounded-md shadow-md"
-                style={{ width: "200px" }}
+            {isSearchHovered && (
+              <span
+                className="absolute top-8 left-0 bg-white text-black p-1 rounded-md shadow-md pointer-events-none"
+                style={{ width: "50px", textAlign: "center", fontSize: "12px" }}
               >
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full p-1 border rounded"
-                />
-                <button
-                  className="bg-primary text-primary-foreground mt-2 w-full py-1 rounded hover:bg-primary/80"
-                  onClick={() => alert("Searching...")}
-                >
-                  Search
-                </button>
-              </div>
+                Search
+              </span>
+            )}
+          </li>
+
+          {/* Product Icon */}
+          <li
+            className="relative"
+            onMouseEnter={() => setIsProductHovered(true)}
+            onMouseLeave={() => setIsProductHovered(false)}
+          >
+            <a href="#" className="block">
+              <FiBox size={20} />
+            </a>
+            {isProductHovered && (
+              <span
+                className="absolute top-8 left-0 bg-white text-black p-1 rounded-md shadow-md pointer-events-none"
+                style={{ width: "60px", textAlign: "center", fontSize: "12px" }}
+              >
+                Products
+              </span>
             )}
           </li>
 
           {/* Notification Icon */}
-          <li>
-            <a href="#" onClick={handleNotificationClick}>
+          <li
+            className="relative"
+            onMouseEnter={() => setIsNotificationHovered(true)}
+            onMouseLeave={() => setIsNotificationHovered(false)}
+          >
+            <a href="#" onClick={handleNotificationClick} className="block">
               <FiBell size={20} />
             </a>
+            {isNotificationHovered && (
+              <span
+                className="absolute top-8 left-0 text-black p-1 rounded-md shadow-md pointer-events-none"
+                style={{
+                  width: "75px",
+                  textAlign: "center",
+                  fontSize: "12px",
+                  backgroundColor: "white",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+              >
+                Notifications
+              </span>
+            )}
           </li>
 
           {/* Cart Icon */}
-          <li>
-            <a href="#" onClick={handleCartClick}>
-              <FiShoppingCart size={20} />
-            </a>
+          <li
+            className="relative"
+            onMouseEnter={() => setIsCartHovered(true)}
+            onMouseLeave={() => setIsCartHovered(false)}
+          >
+            <CartIcon />
+            {isCartHovered && (
+              <span
+                className="absolute top-8 left-0 text-black p-1 rounded-md shadow-md pointer-events-none"
+                style={{
+                  width: "40px",
+                  textAlign: "center",
+                  fontSize: "12px",
+                  backgroundColor: "white",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+              >
+                Cart
+              </span>
+            )}
           </li>
 
           {/* Log In Icon */}
-          <li>
+          <li
+            className="relative"
+            onMouseEnter={() => setIsUserHovered(true)}
+            onMouseLeave={() => setIsUserHovered(false)}
+          >
             <Link to="/login" className={`flex items-center ${LINK_CLASS}`}>
               <FiUser size={20} />
             </Link>
+            {isUserHovered && (
+              <span
+                className="absolute top-8 left-0 text-black p-1 rounded-md shadow-md pointer-events-none"
+                style={{
+                  width: "50px",
+                  textAlign: "center",
+                  fontSize: "12px",
+                  backgroundColor: "white",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+              >
+                Log In
+              </span>
+            )}
           </li>
         </ul>
       </nav>

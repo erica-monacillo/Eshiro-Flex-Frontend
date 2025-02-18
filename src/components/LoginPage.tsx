@@ -4,8 +4,23 @@ import { Link } from "react-router-dom";
 const LoginPage: React.FC = () => {
   return (
     <div
-        className="flex items-center justify-center min-h-screen bg-gray-200">
-      <div className="bg-white p-8 shadow-md rounded-md w-full max-w-sm">
+      className="flex items-center justify-center min-h-screen"
+      style={{
+        background:
+          "linear-gradient(to bottom, rgba(255, 69, 0, 0.8), white 40%, white 60%, rgba(255, 69, 0, 0.8))",
+      }}
+    >
+      {/* Left Section for Shopee Logo */}
+      <div className="hidden lg:flex items-center justify-center w-1/2">
+        <img
+          src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png"
+          alt="Shopee Logo"
+          className="w-80 h-85 object-contain"
+        />
+      </div>
+
+      {/* Right Section for Login Form */}
+      <div className="bg-white p-9 shadow-lg rounded-md w-full max-w-sm ml-auto mr-60">
         <h2 className="text-2xl font-roboto mb-4">Log In</h2>
         <form>
           <div className="mb-4">
@@ -38,15 +53,17 @@ const LoginPage: React.FC = () => {
             type="submit"
             className="w-full py-2 px-4 rounded-md"
             style={{
-                backgroundColor: "#FF9178",
-                color: "white",
-                transition: "background-color 0.3s",
+              backgroundColor: "#FF9178",
+              color: "white",
+              transition: "background-color 0.3s",
             }}
             onMouseEnter={(e) => {
-                (e.target as HTMLButtonElement).style.backgroundColor = "#F53925";
+              (e.target as HTMLButtonElement).style.backgroundColor =
+                "#F53925";
             }}
             onMouseLeave={(e) => {
-                (e.target as HTMLButtonElement).style.backgroundColor = "#ff9178";
+              (e.target as HTMLButtonElement).style.backgroundColor =
+                "#ff9178";
             }}
           >
             Log In

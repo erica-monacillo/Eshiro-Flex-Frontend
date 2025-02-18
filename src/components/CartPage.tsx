@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Navbar";
-import CartPage from './components/CartPage';
+import CartPage from './CartPage';
 
 
 const App: React.FC = () => {
