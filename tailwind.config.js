@@ -18,6 +18,7 @@ export default {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
 			customOrange: '#D35400',
+			ligthsalmon: "#FFA07A",
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -59,7 +60,9 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),
+	require('tailwind-scrollbar-hide')
+  ],
 }
 
   

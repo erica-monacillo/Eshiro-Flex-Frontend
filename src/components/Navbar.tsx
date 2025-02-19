@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Header from "./Header";
 import { FiSearch, FiBell, FiUser, FiBox } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import CartIcon from "./CartIcon"; // Import the CartIcon component
+import CartIcon from "./CartIcon";
+import NotificationPopup from "./NotificationPopup";
 
 const NAV_CLASS =
   "absolute top-0 left-0 w-full p-4 flex justify-between items-center text-primary-foreground z-20";
@@ -10,22 +11,18 @@ const LINK_CLASS = "hover:underline";
 
 const Navbar: React.FC = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSearchHovered, setIsSearchHovered] = useState(false);
   const [isProductHovered, setIsProductHovered] = useState(false);
-  const [isNotificationHovered, setIsNotificationHovered] = useState(false);
   const [isCartHovered, setIsCartHovered] = useState(false);
   const [isUserHovered, setIsUserHovered] = useState(false);
+  const [isNotificationHovered, setIsNotificationHovered] = useState(false);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
   const handleMouseEnter = () => setIsHeaderVisible(true);
   const handleMouseLeave = () => setIsHeaderVisible(false);
 
-  const toggleSearch = () => {
-    setIsSearchVisible((prev) => !prev);
-  };
-
-  const handleNotificationClick = () => {
-    alert("You clicked the notification icon!");
+  const toggleNotifications = () => {
+    setIsNotificationVisible((prev) => !prev);
   };
 
   return (
@@ -46,24 +43,18 @@ const Navbar: React.FC = () => {
             Shopee
           </a>
         </div>
-        <ul
-          className="absolute top-6 flex space-x-6"
-          style={{ right: "150px" }}
-        >
+        <ul className="absolute top-6 flex space-x-6 right-36">
           {/* Search Bar Icon */}
           <li
             className="relative"
             onMouseEnter={() => setIsSearchHovered(true)}
             onMouseLeave={() => setIsSearchHovered(false)}
           >
-            <a href="#" onClick={toggleSearch}>
+            <a href="#" className="block">
               <FiSearch size={20} />
             </a>
             {isSearchHovered && (
-              <span
-                className="absolute top-8 left-0 bg-white text-black p-1 rounded-md shadow-md pointer-events-none"
-                style={{ width: "50px", textAlign: "center", fontSize: "12px" }}
-              >
+              <span className="absolute top-8 left-0 bg-white text-black px-2 py-1 rounded shadow text-sm">
                 Search
               </span>
             )}
@@ -79,10 +70,7 @@ const Navbar: React.FC = () => {
               <FiBox size={20} />
             </a>
             {isProductHovered && (
-              <span
-                className="absolute top-8 left-0 bg-white text-black p-1 rounded-md shadow-md pointer-events-none"
-                style={{ width: "60px", textAlign: "center", fontSize: "12px" }}
-              >
+              <span className="absolute top-8 left-0 bg-white text-black px-2 py-1 rounded shadow text-sm">
                 Products
               </span>
             )}
@@ -94,21 +82,11 @@ const Navbar: React.FC = () => {
             onMouseEnter={() => setIsNotificationHovered(true)}
             onMouseLeave={() => setIsNotificationHovered(false)}
           >
-            <a href="#" onClick={handleNotificationClick} className="block">
+            <button onClick={toggleNotifications} className="block">
               <FiBell size={20} />
-            </a>
+            </button>
             {isNotificationHovered && (
-              <span
-                className="absolute top-8 left-0 text-black p-1 rounded-md shadow-md pointer-events-none"
-                style={{
-                  width: "75px",
-                  textAlign: "center",
-                  fontSize: "12px",
-                  backgroundColor: "white",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                }}
-              >
+              <span className="absolute top-8 left-0 bg-white text-black px-2 py-1 rounded shadow text-sm">
                 Notifications
               </span>
             )}
@@ -122,17 +100,7 @@ const Navbar: React.FC = () => {
           >
             <CartIcon />
             {isCartHovered && (
-              <span
-                className="absolute top-8 left-0 text-black p-1 rounded-md shadow-md pointer-events-none"
-                style={{
-                  width: "40px",
-                  textAlign: "center",
-                  fontSize: "12px",
-                  backgroundColor: "white",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                }}
-              >
+              <span className="absolute top-8 left-0 bg-white text-black px-2 py-1 rounded shadow text-sm">
                 Cart
               </span>
             )}
@@ -148,23 +116,20 @@ const Navbar: React.FC = () => {
               <FiUser size={20} />
             </Link>
             {isUserHovered && (
-              <span
-                className="absolute top-8 left-0 text-black p-1 rounded-md shadow-md pointer-events-none"
-                style={{
-                  width: "50px",
-                  textAlign: "center",
-                  fontSize: "12px",
-                  backgroundColor: "white",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                }}
-              >
+              <span className="absolute top-8 left-0 bg-white text-black px-2 py-1 rounded shadow text-sm">
                 Log In
               </span>
             )}
           </li>
         </ul>
       </nav>
+
+      {/* Notification Pop-up */}
+      {isNotificationVisible && (
+        <NotificationPopup
+          onClose={() => setIsNotificationVisible(false)}
+        />
+      )}
     </div>
   );
 };
