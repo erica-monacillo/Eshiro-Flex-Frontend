@@ -61,7 +61,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({ onClose }) => {
       <div
         className="flex justify-between items-center p-2 border-b border-gray-300 bg-gradient-to-r text-white rounded-t-2xl"
         style={{
-          background: "linear-gradient(to right, #FF4500, #FFA07A",
+          background: "linear-gradient(to right,rgb(255, 51, 0), #FFA07A",
         }}
       >
         <h3 className="font-roboto text-base ml-2 font-semibold">Notifications</h3>

@@ -20,10 +20,22 @@ const AestheticShop: React.FC = () => {
             <>
               <HeroSection />
               <Categories />
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                <ProductCard imageSrc="https://cdn.luxe.digital/media/20240625085857/most-expensive-sneakers-glass-shard-air-jordan-1-luxe-digital-780x520.jpg" productName="Product 1" price="$99.99" />
-                <ProductCard imageSrc="https://visor.ph/wp-content/uploads/2018/06/suzuki-jimny-official-pics-main6.jpg" productName="Suzuki Jimny" price="$79.99" />
-                <ProductCard imageSrc="https://media.tenor.com/_zWYqfZdneIAAAAe/shocked-face-shocked-meme.png" productName="ADETANG" price="$49.99" />
+              <div
+                className="grid grid-cols-5 gap-4 p-4"
+                style={{
+                  gridTemplateRows: "repeat(5, 1fr)", // Create 5 rows
+                }}
+              >
+                {Array(25)
+                  .fill(null)
+                  .map((_, index) => (
+                    <ProductCard
+                      key={index}
+                      imageSrc="https://media.assettype.com/evoindia%2Fimport%2F2018%2F07%2FSuzuki-Jimny-2.jpg"
+                      productName={`Product ${index + 1}`}
+                      price={`$${(index + 1) * 10}`}
+                    />
+                  ))}
               </div>
               <Footer />
             </>
