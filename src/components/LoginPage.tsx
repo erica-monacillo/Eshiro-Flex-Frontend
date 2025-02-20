@@ -1,5 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "@/index.css";
+
+
+
 
 const LoginPage: React.FC = () => {
   return (
@@ -10,13 +14,25 @@ const LoginPage: React.FC = () => {
           "linear-gradient(to bottom, rgba(255, 69, 0, 0.8), white 40%, white 60%, rgba(255, 69, 0, 0.8))",
       }}
     >
-      {/* Left Section for Shopee Logo */}
-      <div className="hidden lg:flex items-center justify-center w-1/2">
-        <img
-          src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png"
-          alt="Shopee Logo"
-          className="w-80 h-85 object-contain"
-        />
+      {/* Left Section for Shopee Logo with Cube Rotation Effect */}
+      <div className="flex items-center justify-center w-1/2 group">
+        <div className="logo-container">
+          <div className="logo-wrapper">
+            <div className="logo-face front">
+              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            </div>
+            <div className="logo-face back">
+              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            </div>
+            <div className="logo-face left">
+              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            </div>
+            <div className="logo-face right">
+              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            </div>
+          </div>
+        </div>
+
       </div>
 
       {/* Right Section for Login Form */}
