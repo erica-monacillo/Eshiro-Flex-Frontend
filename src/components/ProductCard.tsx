@@ -21,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <div
       className={`${CARD_CLASS}`}
       style={{
-        background: "linear-gradient(to right, rgb(233, 69, 28), #FFA07A)",
+        background: "linear-gradient(to right, rgb(221, 65, 27), #FFA07A)",
         width: "100%", // Fit container width
         maxWidth: "250px", // Uniform card size
         height: "300px", // Fixed height for 5 rows in a column

@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import { FiSearch, FiBell, FiUser, FiBox } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import CartIcon from "./CartIcon";
 import NotificationPopup from "./NotificationPopup";
 
-const NAV_CLASS =
-  "absolute top-0 left-0 w-full p-4 flex justify-between items-center text-primary-foreground z-20";
-const LINK_CLASS = "hover:underline";
-
 const Navbar: React.FC = () => {
+  const location = useLocation(); // Get the current route
+  const isCategoryPage = location.pathname.startsWith("/category"); // Check if on a category page
+
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const [isSearchHovered, setIsSearchHovered] = useState(false);
   const [isProductHovered, setIsProductHovered] = useState(false);
@@ -32,7 +31,13 @@ const Navbar: React.FC = () => {
       onMouseLeave={handleMouseLeave}
     >
       <Header isVisible={isHeaderVisible} />
-      <nav className={NAV_CLASS}>
+      <nav
+        className={`${
+          isCategoryPage
+            ? "bg-[#f53722] shadow-lg" // Steady color for category pages
+            : "bg-transparent" // Transparent for the main homepage
+        } fixed top-0 left-0 w-full p-4 flex justify-between items-center text-primary-foreground z-20`}
+      >
         <div className="flex items-center ml-20 space-x-4">
           <img
             src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png"
@@ -112,7 +117,7 @@ const Navbar: React.FC = () => {
             onMouseEnter={() => setIsUserHovered(true)}
             onMouseLeave={() => setIsUserHovered(false)}
           >
-            <Link to="/login" className={`flex items-center ${LINK_CLASS}`}>
+            <Link to="/login" className="flex items-center hover:underline">
               <FiUser size={20} />
             </Link>
             {isUserHovered && (
@@ -126,9 +131,7 @@ const Navbar: React.FC = () => {
 
       {/* Notification Pop-up */}
       {isNotificationVisible && (
-        <NotificationPopup
-          onClose={() => setIsNotificationVisible(false)}
-        />
+        <NotificationPopup onClose={() => setIsNotificationVisible(false)} />
       )}
     </div>
   );
