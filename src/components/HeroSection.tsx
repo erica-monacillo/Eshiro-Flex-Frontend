@@ -21,7 +21,7 @@ const HeroSection: React.FC = () => {
           <div
             className="w-full h-full bg-cover bg-center"
             style={{
-              backgroundImage: "url('https://www.getrael.com/cdn/shop/articles/December_Blog_Banners_Benefits_of_Organic_Skin_Care_Products.png?v=1641404707)",
+              backgroundImage: "url('https://i.imghippo.com/files/Nh5963E.png')",
             }}
           ></div>
         </SwiperSlide>
@@ -31,7 +31,7 @@ const HeroSection: React.FC = () => {
           <div
             className="w-full h-full bg-cover bg-center"
             style={{
-              backgroundImage: "url('https://www.globalrepublic.in/cdn/shop/articles/banner_1.jpg?v=1702639809&width=1500')",
+              backgroundImage: "url('https://i.ytimg.com/vi/3JceH0t2rVA/hqdefault.jpg')",
             }}
           ></div>
         </SwiperSlide>
@@ -41,7 +41,7 @@ const HeroSection: React.FC = () => {
           <div
             className="w-full h-full bg-cover bg-center"
             style={{
-              backgroundImage: "url('https://assets-static.invideo.io/images/origin/Creative_Clothing_Advertisement_Ideas_To_Boost_Sales_revised_3_1_cefa9cda88.png')",
+              backgroundImage: "url('https://i.imghippo.com/files/eFgX8767yhg.png')",
             }}
           ></div>
         </SwiperSlide>

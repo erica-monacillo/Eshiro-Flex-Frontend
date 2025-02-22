@@ -10,20 +10,20 @@ const sampleProducts = [
   { image: "https://via.placeholder.com/150", name: "Product 6", price: "₱49.99" },
 ];
 
-const WomensAccessoriesPage: React.FC = () => {
+const NaturalPage: React.FC = () => {
   return (
     <div className="bg-white py-4">
       <div className="container mx-auto px-4">
         {/* Wide Image */}
         <div className="mb-6">
           <img
-            src=""
-            alt=""
+            src="https://megamorph.in/wp-content/uploads/2024/05/Home-Care.jpg"
+            alt="Health & Personal Care"
             className="w-full xl:w-screen h-64 object-cover rounded-lg shadow-lg scale-80"
-            style={{ objectPosition: "40% 30%" }}
+            style={{ objectPosition: "40% 60%" }}
           />
         </div>
-        <h1 className="text-2xl font-bold mb-4">Women's Accessories</h1>
+        <h1 className="text-2xl font-bold mb-4">Natural</h1>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {sampleProducts.map((product, index) => (
             <div
@@ -58,4 +58,4 @@ const WomensAccessoriesPage: React.FC = () => {
   );
 };
 
-export default WomensAccessoriesPage;
+export default NaturalPage;

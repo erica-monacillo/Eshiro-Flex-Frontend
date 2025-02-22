@@ -1,41 +1,23 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import MensApparelPage from "./categories/MensApparel";
-import WomensApparelPage from "./categories/WomensApparel";
-import HealthPersonalCarePage from "./categories/Health&PersonalCare";
-import HomeLivingPage from "./categories/Home&Living";
-import PetCarePage from "./categories/PetCare";
-import HomeEntertainmentPage from "./categories/HomeEntertainment";
-import MakeupFragrancesPage from "./categories/Makeup&Fragrances";
-import MobilesAccessoriesPage from "./categories/MobileAccessories";
-import WomenAccessoriesPage from "./categories/WomenAccessories";
-import MensBagsAccessories from "./categories/MensBags&Accessories";
+import StabilityPage from "./categories/Stability";
+import Neutral from "./categories/Neutral";
+import NaturalPage from "./categories/Natural";
+import MotionControlPage from "./categories/MotionControl";
 
 const CategoryPage: React.FC = () => {
   const { categoryName } = useParams<{ categoryName: string }>();
 
   const renderCategoryContent = () => {
     switch (categoryName) {
-      case "Men's Apparel":
-        return <MensApparelPage />;
-      case "Women's Apparel":
-        return <WomensApparelPage />;
-      case "Health & Personal Care":
-        return <HealthPersonalCarePage />;
-      case "Home & Living":
-        return <HomeLivingPage />;
-      case "Pet Care":
-        return <PetCarePage />;
-      case "Home Entertainment":
-        return <HomeEntertainmentPage />;
-      case "Makeup & Fragrances":
-        return <MakeupFragrancesPage />;
-      case "Mobile Accessories":
-        return <MobilesAccessoriesPage />;
-      case "Women Accessories":
-        return <WomenAccessoriesPage />;
-      case "Men's Bags & Accessories":
-        return <MensBagsAccessories />;
+      case "Stability":
+        return <StabilityPage />;
+      case "Neutral":
+        return <NeutralPage />;
+      case "Natural":
+        return <NaturalPage />;
+      case "Motion Control":
+        return <MotionControlPage />;
       default:
         return (
           <div className="text-center py-10">

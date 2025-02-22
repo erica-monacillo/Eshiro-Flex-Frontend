@@ -10,7 +10,7 @@ const sampleProducts = [
   { image: "https://via.placeholder.com/150", name: "Product 6", price: "₱49.99" },
 ];
 
-const MensApparelPage: React.FC = () => {
+const StabilityPage: React.FC = () => {
   return (
     <div className="bg-white py-4">
       <div className="container mx-auto px-4">
@@ -24,7 +24,7 @@ const MensApparelPage: React.FC = () => {
           />
         </div>
         {/* Heading */}
-        <h1 className="text-2xl font-bold mb-4">Men's Apparel</h1>
+        <h1 className="text-2xl font-bold mb-4">Stability</h1>
         {/* Product Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
           {sampleProducts.map((product, index) => (
@@ -71,4 +71,4 @@ const MensApparelPage: React.FC = () => {
   );
 };
 
-export default MensApparelPage;
+export default StabilityPage;

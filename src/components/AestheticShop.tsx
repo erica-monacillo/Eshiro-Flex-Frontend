@@ -7,17 +7,11 @@ import ProductCard from "./ProductCard";
 import Footer from "./Footer";
 import LoginPage from "./LoginPage";
 import SignUpPage from "./SignUpPage";
-import MensApparelPage from "./categories/MensApparel";
-import WomensApparelPage from "./categories/WomensApparel";
 import CategoryPage from "./CategoryPage";
-import HealthPersonalCarePage from "./categories/Health&PersonalCare";
-import HomeLivingPage from "./categories/Home&Living";
-import PetCarePage from "./categories/PetCare";
-import HomeEntertainmentPage from "./categories/HomeEntertainment";
-import MakeupFragrancesPage from "./categories/Makeup&Fragrances";
-import MobilesAccessoriesPage from "./categories/MobileAccessories";
-import WomenAccessoriesPage from "./categories/WomenAccessories";
-import MensBagsAccessories from "./categories/MensBags&Accessories";
+import StabilityPage from "./categories/Stability";
+import MotionControlPage from "./categories/MotionControl";
+import NaturalPage from "./categories/Natural";
+import NeutralPage from "./categories/Neutral";
 
 const AestheticShop: React.FC = () => {
   return (
@@ -50,16 +44,10 @@ const AestheticShop: React.FC = () => {
           {/* Dynamic Category Page */}
           <Route path="/category/:categoryName" element={<CategoryPage />} />
           {/* Specific Category Pages */}
-          <Route path="/category/mens-apparel" element={<MensApparelPage />} />
-          <Route path="/category/womens-apparel" element={<WomensApparelPage />} />
-          <Route path="/category/health-and-personal-care" element={<HealthPersonalCarePage />} />
-          <Route path="/category/home-and-living" element={<HomeLivingPage />} />
-          <Route path="/category/pet-care" element={<PetCarePage />} />
-          <Route path="/category/home-entertainment" element={<HomeEntertainmentPage />} />
-          <Route path="/category/makeup-and-fragrances" element={<MakeupFragrancesPage />} />
-          <Route path="/category/mobile-accessories" element={<MobilesAccessoriesPage />} />
-          <Route path="/category/women-accessories" element={<WomenAccessoriesPage />} />
-          <Route path="/category/mens-bags-and-accessories" element={<MensBagsAccessories />} />
+          <Route path="/category/stability" element={<StabilityPage />} />
+          <Route path="/category/neutal" element={<NeutralPage />} />
+          <Route path="/category/natural" element={<NaturalPage />} />
+          <Route path="/category/motion-control" element={<MotionControlPage />} />
           {/* Login and Signup Pages */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />

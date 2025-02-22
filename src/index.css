@@ -49,7 +49,7 @@
     transform-style: preserve-3d;
     transform-origin: center center;
     transform: translateZ(0px) rotateY(0deg);
-    animation: cubeTransition 15s infinite ease-in-out;
+    animation: cubeTransition 8s infinite ease-in-out;
     border: none; /* Ensure wrapper has no border */
     outline: none; /* Remove outline */
 }

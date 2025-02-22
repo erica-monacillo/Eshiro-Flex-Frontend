@@ -61,7 +61,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({ onClose }) => {
       <div
         className="flex justify-between items-center p-2 border-b border-gray-300 bg-gradient-to-r text-white rounded-t-2xl"
         style={{
-          background: "linear-gradient(to right,rgb(255, 51, 0), #FFA07A",
+          background: "linear-gradient(to right,rgb(2, 2, 2),rgba(255, 251, 250, 0.08)",
         }}
       >
         <h3 className="font-roboto text-base ml-2 font-semibold">Notifications</h3>
@@ -76,7 +76,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({ onClose }) => {
           <div
             key={notification.id}
             style={{
-              backgroundColor: notification.read ? "white" : "#FFE4E1",
+              backgroundColor: notification.read ? "white" : "#cacccb",
             }}
             className={`flex items-start space-x-4 p-2 rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105 ${
               notification.read ? "bg-white" : "bg-lightsalmon"

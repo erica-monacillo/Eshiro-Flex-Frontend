@@ -5,7 +5,7 @@ interface HeaderProps {
 }
 
 const HEADER_STYLE = {
-    backgroundColor: '#f53722',
+    backgroundColor: 'black',
 };
 
 const HEADER_CLASS = "absolute top-0 left-0 w-full h-16 z-20 flex items-center text-primary-foreground"; // No background color

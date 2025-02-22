@@ -10,7 +10,7 @@ const sampleProducts = [
   { image: "https://via.placeholder.com/150", name: "Product 6", price: "₱49.99" },
 ];
 
-const MensBagsAccessoriesPage: React.FC = () => {
+const MotionControlPage: React.FC = () => {
   return (
     <div className="bg-white py-4">
       <div className="container mx-auto px-4">
@@ -23,7 +23,7 @@ const MensBagsAccessoriesPage: React.FC = () => {
             style={{ objectPosition: "40% 30%" }}
           />
         </div>
-        <h1 className="text-2xl font-bold mb-4">Men's Bags & Accessories</h1>
+        <h1 className="text-2xl font-bold mb-4">Motion Control</h1>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {sampleProducts.map((product, index) => (
             <div
@@ -58,4 +58,4 @@ const MensBagsAccessoriesPage: React.FC = () => {
   );
 };
 
-export default MensBagsAccessoriesPage;
+export default MotionControlPage;
