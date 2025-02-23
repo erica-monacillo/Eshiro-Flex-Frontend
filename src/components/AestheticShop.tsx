@@ -16,7 +16,7 @@ import CartPage from "./CartPage";
 
 const AestheticShop: React.FC = () => {
   return (
-    <div className="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+    <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 text-gray-800 min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-1">
         <Routes>

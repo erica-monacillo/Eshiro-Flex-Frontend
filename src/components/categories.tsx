@@ -27,7 +27,7 @@ const categories: Category[] = [
 
 const Categories: React.FC = () => {
   return (
-    <div className="bg-black py-4">
+    <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 py-4">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-center">
           {categories.map((category, index) => (

@@ -6,7 +6,7 @@ const SignUpPage: React.FC = () => {
     <div
       className="flex items-center justify-center min-h-screen"
       style={{
-        background: "linear-gradient(to bottom, black, #6a11cb 50%, black",
+        background: "bg-gradient-to-r from-black via-gray-900 to-gray-700",
       }}
     >
       {/* Left Section for Shopee Logo */}

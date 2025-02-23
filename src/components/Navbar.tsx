@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
       <Header isVisible={isHeaderVisible} />
       <nav
         className={`${
-          isCategoryPage ? "bg-black shadow-lg" : "bg-black"
+          isCategoryPage ? "bg-gradient-to-r from-black via-gray-900 to-gray-700 shadow-lg" : "bg-gradient-to-r from-black via-gray-900 to-gray-700"
         } fixed top-0 left-0 w-full p-4 flex justify-between items-center text-primary-foreground z-20`}
       >
         <div className="flex items-center ml-20 space-x-4">
