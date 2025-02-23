@@ -12,6 +12,7 @@ import StabilityPage from "./categories/Stability";
 import MotionControlPage from "./categories/MotionControl";
 import NaturalPage from "./categories/Natural";
 import NeutralPage from "./categories/Neutral";
+import CartPage from "./CartPage";
 
 const AestheticShop: React.FC = () => {
   return (
@@ -41,17 +42,19 @@ const AestheticShop: React.FC = () => {
               </>
             }
           />
-          {/* Dynamic Category Page */}
-          <Route path="/category/:categoryName" element={<CategoryPage />} />
           {/* Specific Category Pages */}
           <Route path="/category/stability" element={<StabilityPage />} />
           <Route path="/category/neutal" element={<NeutralPage />} />
           <Route path="/category/natural" element={<NaturalPage />} />
-          <Route path="/category/motion-control" element={<MotionControlPage />} />
-          {/* Login and Signup Pages */}
+          <Route path="/category/motioncontrol" element={<MotionControlPage />} />
+          
+          {/* Dynamic Category Page */}
+          <Route path="/category/:categoryName" element={<CategoryPage />} />
+
+          {/* Other Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          {/* 404 Fallback */}
+          <Route path="/cart" element={<CartPage />} />
           <Route path="*" element={<div className="text-center py-20">Page Not Found</div>} />
         </Routes>
       </div>

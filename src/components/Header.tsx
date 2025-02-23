@@ -5,7 +5,7 @@ interface HeaderProps {
 }
 
 const HEADER_STYLE = {
-    backgroundColor: 'black',
+    background: "linear-gradient(to right, #000000, #1a1a1a, #2d2d2d)",
 };
 
 const HEADER_CLASS = "absolute top-0 left-0 w-full h-16 z-20 flex items-center text-primary-foreground"; // No background color

@@ -2,60 +2,80 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "@/index.css";
 
-
-
-
 const LoginPage: React.FC = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen"
       style={{
-        background:
-          "linear-gradient(to bottom, rgba(255, 69, 0, 0.8), white 40%, white 60%, rgba(255, 69, 0, 0.8))",
+        background: "linear-gradient(to bottom, black, #6a11cb 50%, black)",
       }}
     >
       {/* Left Section for Shopee Logo with Cube Rotation Effect */}
       <div className="flex items-center justify-center w-1/2 group">
-        <div className="logo-container">
+        <div className="logo-container perspective">
           <div className="logo-wrapper">
             <div className="logo-face front">
-              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+              <img
+                src="https://i.imghippo.com/files/olL1734gOU.png"
+                alt="Shopee Logo"
+                className="logo-image"
+              />
             </div>
-            <div className="logo-face back">
-              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            <div className="logo-face front">
+              <img
+                src="https://i.imghippo.com/files/olL1734gOU.png"
+                alt="Shopee Logo"
+                className="logo-image"
+              />
             </div>
-            <div className="logo-face left">
-              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            <div className="logo-face front">
+              <img
+                src="https://i.imghippo.com/files/olL1734gOU.png"
+                alt="Shopee Logo"
+                className="logo-image"
+              />
             </div>
-            <div className="logo-face right">
-              <img src="https://user-images.githubusercontent.com/38139389/61145525-e3635900-a501-11e9-81a3-bcd9ab3e3b4d.png" alt="Shopee Logo" className="logo-image" />
+            <div className="logo-face front">
+              <img
+                src="https://i.imghippo.com/files/olL1734gOU.png"
+                alt="Shopee Logo"
+                className="logo-image"
+              />
             </div>
           </div>
         </div>
-
       </div>
 
       {/* Right Section for Login Form */}
-      <div className="bg-white p-9 shadow-lg rounded-md w-full max-w-sm ml-auto mr-60">
-        <h2 className="text-2xl font-roboto mb-4">Log In</h2>
+      <div
+            className="p-8 rounded-2xl shadow-2xl w-full max-w-sm ml-auto mr-60"
+            style={{
+            background: "linear-gradient(to bottom, #121212, #383838)",
+            border: "1px solid #444",
+            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)",
+            }}
+        >
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-white">
+          Log In
+        </h2>
         <form>
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-white"
             >
-              Email
+              Username
             </label>
             <input
-              type="email"
-              id="email"
+              type="username"
+              id="username"
               className="w-full border border-gray-300 rounded-md p-2 mt-1"
             />
           </div>
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-white"
             >
               Password
             </label>
@@ -67,26 +87,28 @@ const LoginPage: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 rounded-md"
+            className="w-full py-3 px-4 rounded-lg font-bold text-white"
             style={{
-              backgroundColor: "#FF9178",
-              color: "white",
-              transition: "background-color 0.3s",
+              backgroundImage: "linear-gradient(to right, #6a11cb, #2575fc)",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
             }}
             onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.backgroundColor =
-                "#F53925";
+              (e.target as HTMLButtonElement).style.transform = "scale(1.05)";
+              (e.target as HTMLButtonElement).style.boxShadow =
+                "0px 10px 25px rgba(0, 0, 0, 0.3)";
             }}
             onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.backgroundColor =
-                "#ff9178";
+              (e.target as HTMLButtonElement).style.transform = "scale(1)";
+              (e.target as HTMLButtonElement).style.boxShadow =
+                "0px 4px 10px rgba(0, 0, 0, 0.2)";
             }}
           >
             Log In
           </button>
         </form>
         <div className="mt-4 text-center">
-          <span className="text-sm text-gray-700">New to Shopee?</span>{" "}
+          <span className="text-sm text-white">New to Shopee?</span>{" "}
           <Link to="/signup" className="text-sm text-blue-500 hover:underline">
             Sign Up
           </Link>
