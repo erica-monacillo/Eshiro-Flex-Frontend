@@ -21,7 +21,7 @@ const categories: Category[] = [
   },
   {
     icon: "https://i.imghippo.com/files/CyZ2884Wk.png",
-    label: "Montion Control",
+    label: "MotionControl",
   },
 ];
 
