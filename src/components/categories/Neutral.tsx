@@ -17,10 +17,10 @@ const NeutralPage: React.FC = () => {
         {/* Wide Image */}
         <div className="mb-6">
           <img
-            src=""
-            alt=""
+            src="https://megamorph.in/wp-content/uploads/2024/05/Home-Care.jpg"
+            alt="Health & Personal Care"
             className="w-full xl:w-screen h-64 object-cover rounded-lg shadow-lg scale-80"
-            style={{ objectPosition: "40% 30%" }}
+            style={{ objectPosition: "40% 60%" }}
           />
         </div>
         <h1 className="text-2xl font-bold mb-4">Neutral</h1>

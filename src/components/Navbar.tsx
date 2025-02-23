@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
       >
         <div className="flex items-center ml-20 space-x-4">
           <img
-            src="https://i.imghippo.com/files/SkCY2678f.png"
+            src="https://i.imghippo.com/files/kMs5388zTU.png"
             alt="Éshiro Flex"
             className="h-8"
           />
@@ -45,35 +45,35 @@ const Navbar: React.FC = () => {
         <ul className="absolute top-6 flex space-x-6 right-36">
           {/* Search Bar Icon */}
           <li className="relative">
-            <a href="#" className="block">
+            <a href="#" className="block" title="Search">
               <FiSearch size={20} color="white" />
             </a>
           </li>
 
           {/* Product Icon */}
           <li className="relative">
-            <a href="#" className="block">
+            <a href="#" className="block" title="Product">
               <FiBox size={20} color="white" />
             </a>
           </li>
 
           {/* Notification Icon */}
           <li className="relative">
-            <button onClick={toggleNotifications} className="block">
+            <button onClick={toggleNotifications} className="block" title="Notification">
               <FiBell size={20} color="white" />
             </button>
           </li>
 
           {/* Cart Icon */}
           <li className="relative">
-            <div className="text-white">
+            <div className="text-white" title="Cart">
               <CartIcon />
             </div>
           </li>
 
           {/* Log In Icon */}
           <li className="relative">
-            <Link to="/login" className="flex items-center">
+            <Link to="/login" className="flex items-center" title="Log In">
               <FiUser size={20} color="white" />
             </Link>
           </li>

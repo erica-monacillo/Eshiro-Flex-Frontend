@@ -9,14 +9,14 @@ const CategoryPage: React.FC = () => {
   const { categoryName } = useParams<{ categoryName: string }>();
 
   const renderCategoryContent = () => {
-    switch (categoryName) {
-      case "Stability":
+    switch (categoryName?.toLowerCase()) { // Normalize case for matching
+      case "stability":
         return <StabilityPage />;
-      case "Neutral":
-        return <NeutralPage />;
-      case "Natural":
+      case "neutral":
+        return <Neutral />;
+      case "natural":
         return <NaturalPage />;
-      case "Motion Control":
+      case "motion control":
         return <MotionControlPage />;
       default:
         return (
