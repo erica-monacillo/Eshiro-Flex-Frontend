@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import Categories from "./categories";
+import WhatsNew from "./WhatsNew"; // Import WhatsNew component
 import ProductCard from "./ProductCard";
 import Footer from "./Footer";
 import LoginPage from "./LoginPage";
@@ -27,6 +28,7 @@ const AestheticShop: React.FC = () => {
               <>
                 <HeroSection />
                 <Categories />
+                <WhatsNew /> {/* Add WhatsNew component here */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4 mt-4">
                   {Array(25)
                     .fill(null)
