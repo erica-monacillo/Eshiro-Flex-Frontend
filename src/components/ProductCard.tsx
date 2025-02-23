@@ -1,10 +1,5 @@
 import React from "react";
-
-const BUTTON_CLASS =
-  "bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300";
-const CARD_CLASS =
-  "rounded-2xl shadow-2xl overflow-hidden hover:shadow-xl transform hover:scale-105 transition-all duration-300";
-const CARD_IMAGE_CLASS = "w-full rounded-t-2xl shadow-md object-cover";
+import { Heart, ShoppingCart } from "lucide-react";
 
 interface ProductCardProps {
   imageSrc: string;
@@ -18,32 +13,39 @@ const ProductCard: React.FC<ProductCardProps> = ({
   price,
 }) => {
   return (
-    <div
-      className={`${CARD_CLASS}`}
-      style={{
-        background: "linear-gradient(to right, rgb(221, 65, 27), #FFA07A)",
-        width: "100%", // Fit container width
-        maxWidth: "250px", // Uniform card size
-        height: "300px", // Fixed height for 5 rows in a column
-        margin: "0 auto", // Center-align in grid
-      }}
-    >
+    <div className="relative bg-gray-900 border border-gray-700 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-transform duration-300 p-4">
+      
+      {/* Wishlist & Swap Buttons */}
+      <div className="absolute top-3 right-3 flex space-x-2">
+        <button className="p-1 text-gray-300 bg-gray-800 rounded-full shadow-sm hover:bg-gray-700 hover:text-red-400">
+          <Heart size={18} />
+        </button>
+        <button className="p-1 text-gray-300 bg-gray-800 rounded-full shadow-sm hover:bg-gray-700 hover:text-gray-400">
+          ⇅
+        </button>
+      </div>
+
+      {/* Product Image */}
       <img
         src={imageSrc}
         alt={productName}
-        className={`${CARD_IMAGE_CLASS}`}
-        style={{ height: "150px", width: "100%" }} // Adjust image size
+        className="w-full h-40 object-cover rounded-xl mb-3"
       />
-      <div className="p-4">
-        <h2 className="text-lg font-bold text-white mb-1">{productName}</h2>
-        <p className="text-sm text-white mb-3">
-          Get the best quality product for an amazing experience.
-        </p>
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-bold text-white">{price}</span>
-          <button className={BUTTON_CLASS}>Add to Cart</button>
+
+      {/* Product Details */}
+      <div>
+        <h2 className="font-semibold text-white truncate">{productName}</h2>
+        <p className="text-sm text-gray-400">My Store</p>
+        <div className="flex items-center justify-between mt-2">
+          <p className="text-lg font-bold text-white">{price}</p>
+          <p className="text-xs line-through text-gray-500">₱80.00</p>
         </div>
       </div>
+
+      {/* Add to Cart Button */}
+      <button className="mt-4 w-full bg-white text-black text-sm py-2 rounded-full shadow hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition">
+        <ShoppingCart size={16} className="mr-1 inline" /> ADD TO CART
+      </button>
     </div>
   );
 };
