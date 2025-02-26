@@ -8,47 +8,68 @@ const sampleProducts = [
   { image: "https://via.placeholder.com/150", name: "Product 4", price: "₱69.99" },
   { image: "https://via.placeholder.com/150", name: "Product 5", price: "₱59.99" },
   { image: "https://via.placeholder.com/150", name: "Product 6", price: "₱49.99" },
+  { image: "https://via.placeholder.com/150", name: "Product 7", price: "₱39.99" },
+  { image: "https://via.placeholder.com/150", name: "Product 8", price: "₱29.99" },
+  { image: "https://via.placeholder.com/150", name: "Product 9", price: "₱19.99" },
+  { image: "https://via.placeholder.com/150", name: "Product 10", price: "₱9.99" },
 ];
 
 const NeutralPage: React.FC = () => {
   return (
-    <div className="bg-white py-4">
-      <div className="container mx-auto px-4">
+    <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 min-h-screen py-6">
+      <div className="container mx-auto px-6">
+        
         {/* Wide Image */}
-        <div className="mb-6">
+        <div className="mb-8">
           <img
-            src="https://megamorph.in/wp-content/uploads/2024/05/Home-Care.jpg"
-            alt="Health & Personal Care"
-            className="w-full xl:w-screen h-64 object-cover rounded-lg shadow-lg scale-80"
+            src="https://media.istockphoto.com/id/1339440288/photo/white-sneakers-shoes-and-girl%C3%A2s-legs-on-nude-background-casual-footwear.jpg?s=612x612&w=0&k=20&c=huKyqMekfhKH7uY7XWmyi2LI7mJuctzNhOAKjbrlReU="
+            alt=""
+            className="w-full xl:w-screen h-64 object-cover rounded-lg shadow-lg"
             style={{ objectPosition: "40% 60%" }}
           />
         </div>
-        <h1 className="text-2xl font-bold mb-4">Neutral</h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+        {/* Heading */}
+        <h1 className="text-3xl font-bold text-white mb-6">Neutral</h1>
+
+        {/* Product Grid - 5 per row, 2 rows */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {sampleProducts.map((product, index) => (
             <div
               key={index}
-              className="border p-4 rounded-lg shadow-lg bg-[#D2B48C] relative"
+              className="relative bg-gray-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-transform duration-300 p-4"
             >
-              <div className="absolute top-2 right-2 flex space-x-2">
-                <button className="text-gray-600 hover:text-red-500">
-                  <Heart size={20} />
+              
+              {/* Wishlist & Options Buttons */}
+              <div className="absolute top-3 right-3 flex space-x-2">
+                <button className="p-1 text-gray-300 bg-gray-700 rounded-full shadow-sm hover:bg-gray-600 hover:text-red-400">
+                  <Heart size={18} />
                 </button>
-                <button className="text-gray-600 hover:text-gray-800">⇅</button>
+                <button className="p-1 text-gray-300 bg-gray-700 rounded-full shadow-sm hover:bg-gray-600 hover:text-gray-400">
+                  ⇅
+                </button>
               </div>
+
+              {/* Product Image */}
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-32 object-cover rounded"
+                className="w-full h-40 object-cover rounded-lg mb-3"
               />
-              <h2 className="font-bold mt-2 text-sm truncate">{product.name}</h2>
-              <p className="text-gray-600 text-xs">My Store</p>
-              <div className="flex items-center space-x-2">
-                <p className="font-bold text-lg">{product.price}</p>
-                <p className="text-sm line-through text-gray-500">₱80.00</p>
+
+              {/* Product Details */}
+              <div>
+                <h2 className="font-semibold text-white truncate">{product.name}</h2>
+                <p className="text-sm text-gray-400">My Store</p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className="text-lg font-bold text-white">{product.price}</p>
+                  <p className="text-xs line-through text-gray-500">₱80.00</p>
+                </div>
               </div>
-              <button className="mt-2 flex items-center justify-center bg-orange-600 text-white rounded-lg py-2 w-full hover:bg-beige-700 transition">
-                <ShoppingCart size={16} className="mr-2" /> ADD TO CART
+
+              {/* Add to Cart Button */}
+              <button className="mt-4 w-full bg-white text-black text-sm py-2 rounded-md shadow hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition">
+                <ShoppingCart size={16} className="mr-1 inline" /> ADD TO CART
               </button>
             </div>
           ))}

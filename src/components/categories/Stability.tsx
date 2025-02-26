@@ -21,7 +21,7 @@ const StabilityPage: React.FC = () => {
         {/* Wide Image */}
         <div className="mb-8">
           <img
-            src=""
+            src="https://cdn.runrepeat.com/storage/gallery/buying_guide_primary/25/best-stability-running-shoes-001-22321862-960.jpg"
             alt="Men's Apparel Banner"
             className="w-full xl:w-screen h-64 object-cover rounded-xl shadow-lg"
             style={{ objectPosition: "40% 30%" }}

@@ -13,43 +13,43 @@ const sampleProducts = [
 const MotionControlPage: React.FC = () => {
   console.log("MotionControlPage Loaded")
   return (
-    <div className="bg-white py-4">
-      <div className="container mx-auto px-4">
+    <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 min-h-screen py-6">
+      <div className="container mx-auto px-6">
         {/* Wide Image */}
-        <div className="mb-6">
+        <div className="mb-8">
           <img
-            src="https://megamorph.in/wp-content/uploads/2024/05/Home-Care.jpg"
-            alt="Health & Personal Care"
-            className="w-full xl:w-screen h-64 object-cover rounded-lg shadow-lg scale-80"
+            src="https://xeleroshoes.com/wp-content/uploads/2022/06/Steadfast-White-Coral-Lifestyle-High-Res-002-1-768x513.jpg"
+            alt=""
+            className="w-full xl:w-screen h-64 object-cover rounded-lg shadow-lg"
             style={{ objectPosition: "40% 60%" }}
           />
         </div>
-        <h1 className="text-2xl font-bold mb-4">Motion Control</h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <h1 className="text-3xl font-bold text-white mb-6">Motion Control</h1>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {sampleProducts.map((product, index) => (
             <div
               key={index}
-              className="border p-4 rounded-lg shadow-lg bg-[#D2B48C] relative"
+              className="relative bg-gray-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-transform duration-300 p-4"
             >
-              <div className="absolute top-2 right-2 flex space-x-2">
-                <button className="text-gray-600 hover:text-red-500">
-                  <Heart size={20} />
+              <div className="absolute top-3 right-3 flex space-x-2">
+                <button className="p-1 text-gray-300 bg-gray-700 rounded-full shadow-sm hover:bg-gray-600 hover:text-red-400">
+                  <Heart size={18} />
                 </button>
-                <button className="text-gray-600 hover:text-gray-800">⇅</button>
+                <button className="p-1 text-gray-300 bg-gray-700 rounded-full shadow-sm hover:bg-gray-600 hover:text-gray-400">⇅</button>
               </div>
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-32 object-cover rounded"
+                className="w-full h-40 object-cover rounded-lg mb-3"
               />
-              <h2 className="font-bold mt-2 text-sm truncate">{product.name}</h2>
-              <p className="text-gray-600 text-xs">My Store</p>
-              <div className="flex items-center space-x-2">
-                <p className="font-bold text-lg">{product.price}</p>
-                <p className="text-sm line-through text-gray-500">₱80.00</p>
+              <h2 className="font-semibold text-white truncate">{product.name}</h2>
+              <p className="text-sm text-gray-400">My Store</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-lg font-bold text-white">{product.price}</p>
+                <p className="text-xs line-through text-gray-500">₱80.00</p>
               </div>
-              <button className="mt-2 flex items-center justify-center bg-orange-600 text-white rounded-lg py-2 w-full hover:bg-beige-700 transition">
-                <ShoppingCart size={16} className="mr-2" /> ADD TO CART
+              <button className="mt-4 w-full bg-white text-black text-sm py-2 rounded-md shadow hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition">
+                <ShoppingCart size={16} className="mr-1 inline" /> ADD TO CART
               </button>
             </div>
           ))}
