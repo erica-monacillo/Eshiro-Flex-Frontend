@@ -24,7 +24,29 @@ const SignUpPage: React.FC = () => {
                 }}
               />
             </div>
+            <div className="logo-face right">
+              <img
+                src="https://i.imghippo.com/files/chP3718kF.png"
+                alt="Éshiro Flex"
+                className="logo-image"
+                style={{
+                    width: "300px",
+                    height: "300px",
+                }}
+              />
+            </div>
             <div className="logo-face back">
+              <img
+                src="https://i.imghippo.com/files/chP3718kF.png"
+                alt="Éshiro Flex"
+                className="logo-image"
+                style={{
+                    width: "300px",
+                    height: "300px",
+                }}
+              />
+            </div>
+            <div className="logo-face left">
               <img
                 src="https://i.imghippo.com/files/chP3718kF.png"
                 alt="Éshiro Flex"

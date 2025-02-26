@@ -38,23 +38,23 @@ const LoginPage: React.FC = () => {
                 className="logo-image"
               />
             </div>
-            <div className="logo-face front">
+            <div className="logo-face right">
               <img
                 src="https://i.imghippo.com/files/chP3718kF.png"
                 alt=""
                 className="logo-image"
               />
             </div>
-            <div className="logo-face front">
+            <div className="logo-face back">
               <img
                 src="https://i.imghippo.com/files/chP3718kF.png"
                 alt=""
                 className="logo-image"
               />
             </div>
-            <div className="logo-face front">
+            <div className="logo-face left">
               <img
-                src="hhttps://i.imghippo.com/files/chP3718kF.png"
+                src="https://i.imghippo.com/files/chP3718kF.png"
                 alt=""
                 className="logo-image"
               />
