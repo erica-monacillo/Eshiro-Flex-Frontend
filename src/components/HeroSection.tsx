@@ -12,38 +12,41 @@ const HeroSection: React.FC = () => {
         spaceBetween={0}
         slidesPerView={1}
         loop={true}
-        autoplay={{ delay: 2000 }}
+        autoplay={{ delay: 5000 }} // Adjust autoplay delay as needed
         pagination={{ clickable: true }}
         className="absolute top-0 left-0 w-full h-[70vh] -z-10"
       >
-        {/* Slide 1 */}
+        {/* Slide 1: Video */}
         <SwiperSlide>
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage: "url('https://i.imghippo.com/files/Nh5963E.png')",
-            }}
-          ></div>
+          <video
+            className="w-full h-full object-cover"
+            src="https://res.cloudinary.com/dbzoophuc/video/upload/v1740298739/jlwfz1sbsdxjhaarjpzh.mp4"
+            autoPlay
+            loop
+            muted
+          ></video>
         </SwiperSlide>
 
-        {/* Slide 2 */}
+        {/* Slide 2: Video */}
         <SwiperSlide>
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage: "url('https://i.ytimg.com/vi/3JceH0t2rVA/hqdefault.jpg')",
-            }}
-          ></div>
+          <video
+            className="w-full h-full object-cover"
+            src="https://res.cloudinary.com/dbzoophuc/video/upload/v1740299380/s4tx7squhst0eblkcmt4.mp4"
+            autoPlay
+            loop
+            muted
+          ></video>
         </SwiperSlide>
 
-        {/* Slide 3 */}
+        {/* Slide 3: Video */}
         <SwiperSlide>
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage: "url('https://i.imghippo.com/files/eFgX8767yhg.png')",
-            }}
-          ></div>
+          <video
+            className="w-full h-full object-cover"
+            src="https://res.cloudinary.com/dbzoophuc/video/upload/v1740299539/js0qtzrh8lovdgnyd9df.mp4"
+            autoPlay
+            loop
+            muted
+          ></video>
         </SwiperSlide>
       </Swiper>
     </div>

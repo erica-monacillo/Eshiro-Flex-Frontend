@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import Categories from "./categories";
+import WhatsNew from "./WhatsNew"; // Import WhatsNew component
 import ProductCard from "./ProductCard";
 import Footer from "./Footer";
 import LoginPage from "./LoginPage";
@@ -12,10 +13,12 @@ import StabilityPage from "./categories/Stability";
 import MotionControlPage from "./categories/MotionControl";
 import NaturalPage from "./categories/Natural";
 import NeutralPage from "./categories/Neutral";
+import CartPage from "./CartPage";
+import UserProfile from "./UserProfile"; // Import UserProfile component
 
 const AestheticShop: React.FC = () => {
   return (
-    <div className="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+    <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 text-gray-800 min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-1">
         <Routes>
@@ -26,6 +29,7 @@ const AestheticShop: React.FC = () => {
               <>
                 <HeroSection />
                 <Categories />
+                <WhatsNew /> {/* Add WhatsNew component here */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4 mt-4">
                   {Array(25)
                     .fill(null)
@@ -41,17 +45,20 @@ const AestheticShop: React.FC = () => {
               </>
             }
           />
-          {/* Dynamic Category Page */}
-          <Route path="/category/:categoryName" element={<CategoryPage />} />
           {/* Specific Category Pages */}
           <Route path="/category/stability" element={<StabilityPage />} />
-          <Route path="/category/neutal" element={<NeutralPage />} />
+          <Route path="/category/neutral" element={<NeutralPage />} />
           <Route path="/category/natural" element={<NaturalPage />} />
-          <Route path="/category/motion-control" element={<MotionControlPage />} />
-          {/* Login and Signup Pages */}
+          <Route path="/category/motioncontrol" element={<MotionControlPage />} />
+
+          {/* Dynamic Category Page */}
+          <Route path="/category/:categoryName" element={<CategoryPage />} />
+
+          {/* Other Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          {/* 404 Fallback */}
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/profile" element={<UserProfile />} /> {/* Add UserProfile route */}
           <Route path="*" element={<div className="text-center py-20">Page Not Found</div>} />
         </Routes>
       </div>

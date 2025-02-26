@@ -40,6 +40,12 @@
     border: none; /* Ensure no container border */
     outline: none; /* Remove any outline */
     background: transparent; /* Make sure the container is transparent */
+    transform-style: preserve-3d;
+    animation: rotate 8s infinite linear;
+}
+
+.perspective {
+    perspective: 1000px;
 }
 
 .logo-wrapper {
@@ -49,7 +55,7 @@
     transform-style: preserve-3d;
     transform-origin: center center;
     transform: translateZ(0px) rotateY(0deg);
-    animation: cubeTransition 8s infinite ease-in-out;
+    animation: cubeTransition 5s infinite ease-in-out;
     border: none; /* Ensure wrapper has no border */
     outline: none; /* Remove outline */
 }

@@ -16,7 +16,7 @@ const CategoryPage: React.FC = () => {
         return <Neutral />;
       case "natural":
         return <NaturalPage />;
-      case "motion control":
+      case "motioncontrol":
         return <MotionControlPage />;
       default:
         return (
