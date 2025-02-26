@@ -1,8 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "@/index.css";
 
 const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Simulate login process
+    if (username && password) {
+      localStorage.setItem("authToken", "exampleToken"); // Save token for authentication
+      localStorage.setItem("username", username); // Save username
+      navigate("/profile"); // Navigate to User Profile
+    } else {
+      alert("Please enter both username and password");
+    }
+  };
+
   return (
     <div
       className="flex items-center justify-center min-h-screen"
@@ -48,27 +65,29 @@ const LoginPage: React.FC = () => {
 
       {/* Right Section for Login Form */}
       <div
-            className="p-8 rounded-2xl shadow-2xl w-full max-w-sm ml-auto mr-60"
-            style={{
-            background: "linear-gradient(to bottom, #121212, #383838)",
-            border: "1px solid #444",
-            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)",
-            }}
-        >
+        className="p-8 rounded-2xl shadow-2xl w-full max-w-sm ml-auto mr-60"
+        style={{
+          background: "linear-gradient(to bottom, #121212, #383838)",
+          border: "1px solid #444",
+          boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)",
+        }}
+      >
         <h2 className="text-3xl font-extrabold mb-6 text-center text-white">
           Log In
         </h2>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-medium text-white"
             >
               Username
             </label>
             <input
-              type="username"
+              type="text"
               id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full border border-gray-300 rounded-md p-2 mt-1"
             />
           </div>
@@ -82,6 +101,8 @@ const LoginPage: React.FC = () => {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-gray-300 rounded-md p-2 mt-1"
             />
           </div>
