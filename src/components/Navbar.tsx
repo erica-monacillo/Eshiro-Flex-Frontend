@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
       >
         <div className="flex items-center ml-20 space-x-4">
           <img
-            src="https://i.imghippo.com/files/kMs5388zTU.png"
+            src="https://i.imghippo.com/files/EKJR1736yTo.png"
             alt="Éshiro Flex"
             className="h-8"
           />

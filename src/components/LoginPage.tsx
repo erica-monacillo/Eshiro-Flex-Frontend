@@ -33,29 +33,29 @@ const LoginPage: React.FC = () => {
           <div className="logo-wrapper">
             <div className="logo-face front">
               <img
-                src="https://i.imghippo.com/files/olL1734gOU.png"
-                alt="Shopee Logo"
+                src="https://i.imghippo.com/files/chP3718kF.png"
+                alt=""
                 className="logo-image"
               />
             </div>
             <div className="logo-face front">
               <img
-                src="https://i.imghippo.com/files/olL1734gOU.png"
-                alt="Shopee Logo"
+                src="https://i.imghippo.com/files/chP3718kF.png"
+                alt=""
                 className="logo-image"
               />
             </div>
             <div className="logo-face front">
               <img
-                src="https://i.imghippo.com/files/olL1734gOU.png"
-                alt="Shopee Logo"
+                src="https://i.imghippo.com/files/chP3718kF.png"
+                alt=""
                 className="logo-image"
               />
             </div>
             <div className="logo-face front">
               <img
-                src="https://i.imghippo.com/files/olL1734gOU.png"
-                alt="Shopee Logo"
+                src="hhttps://i.imghippo.com/files/chP3718kF.png"
+                alt=""
                 className="logo-image"
               />
             </div>

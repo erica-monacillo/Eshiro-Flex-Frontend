@@ -15,7 +15,7 @@ const SignUpPage: React.FC = () => {
           <div className="logo-wrapper">
             <div className="logo-face front">
               <img
-                src="https://i.imghippo.com/files/olL1734gOU.png"
+                src="https://i.imghippo.com/files/chP3718kF.png"
                 alt="Éshiro Flex"
                 className="logo-image"
                 style={{
@@ -26,7 +26,7 @@ const SignUpPage: React.FC = () => {
             </div>
             <div className="logo-face back">
               <img
-                src="https://i.imghippo.com/files/olL1734gOU.png"
+                src="https://i.imghippo.com/files/chP3718kF.png"
                 alt="Éshiro Flex"
                 className="logo-image"
                 style={{
