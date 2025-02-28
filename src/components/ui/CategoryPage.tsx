@@ -1,9 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import StabilityPage from "./categories/Stability";
-import Neutral from "./categories/Neutral";
-import NaturalPage from "./categories/Natural";
-import MotionControlPage from "./categories/MotionControl";
+import StabilityPage from "@/components/categories/Stability";
+import Neutral from "@/components/categories/Neutral";
+import NaturalPage from "@/components/categories/Natural";
+import MotionControlPage from "@/components/categories/MotionControl";
+
+
 
 const CategoryPage: React.FC = () => {
   const { categoryName } = useParams<{ categoryName: string }>();

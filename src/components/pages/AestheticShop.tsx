@@ -1,18 +1,18 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./Navbar";
-import HeroSection from "./HeroSection";
-import Categories from "./categories";
+import Navbar from "../common/Navbar";
+import HeroSection from "../ui/HeroSection";
+import Categories from "../ui/categories";
 import WhatsNew from "./WhatsNew"; // Import WhatsNew component
-import ProductCard from "./ProductCard";
-import Footer from "./Footer";
+import ProductCard from "../ui/ProductCard";
+import Footer from "../common/Footer";
 import LoginPage from "./LoginPage";
 import SignUpPage from "./SignUpPage";
-import CategoryPage from "./CategoryPage";
-import StabilityPage from "./categories/Stability";
-import MotionControlPage from "./categories/MotionControl";
-import NaturalPage from "./categories/Natural";
-import NeutralPage from "./categories/Neutral";
+import CategoryPage from "../ui/CategoryPage";
+import StabilityPage from "../categories/Stability";
+import MotionControlPage from "../categories/MotionControl";
+import NaturalPage from "../categories/Natural";
+import NeutralPage from "../categories/Neutral";
 import CartPage from "./CartPage";
 import UserProfile from "./UserProfile"; // Import UserProfile component
 
