@@ -81,7 +81,7 @@ const LoginPage: React.FC = () => {
               htmlFor="username"
               className="block text-sm font-medium text-white"
             >
-              Username
+              Email or Username
             </label>
             <input
               type="text"
