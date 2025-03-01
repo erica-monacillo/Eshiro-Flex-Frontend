@@ -63,9 +63,7 @@ const CartPage: React.FC<{
                 key={item.id}
                 className="flex items-center justify-between border-b border-gray-700 py-4"
               >
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(item.id)}
+                <input type="checkbox" checked={selectedItems.includes(item.id)}
                   onChange={() => handleSelectItem(item.id)}
                   className="mr-4 w-5 h-5 text-indigo-500 bg-gray-800 border-gray-600 rounded focus:ring-indigo-500"
                 />
