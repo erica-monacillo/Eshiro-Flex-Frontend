@@ -18,6 +18,7 @@ import NeutralPage from "../categories/Neutral";
 import CartPage from "./CartPage";
 import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
+import Wishlist from "./Wishlist";
 
 export interface CartItem {
   id: number;
@@ -27,8 +28,16 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface Product {
+  id: number;
+  productName: string;
+  price: string;
+  imageSrc: string;
+}
+
 const AestheticShop: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
 
   const handleAddToCart = (item: CartItem) => {
     setCartItems((prevItems) => {
@@ -42,6 +51,15 @@ const AestheticShop: React.FC = () => {
       } else {
         return [...prevItems, { ...item, quantity: 1 }];
       }
+    });
+  };
+
+  const handleAddToWishlist = (item: Product) => {
+    setWishlistItems((prevItems) => {
+      if (!prevItems.find((wishlistItem) => wishlistItem.id === item.id)) {
+        return [...prevItems, item];
+      }
+      return prevItems; // Avoid duplicates
     });
   };
 
@@ -92,6 +110,7 @@ const AestheticShop: React.FC = () => {
                       productName={product.productName}
                       price={product.price}
                       onAddToCart={handleAddToCart}
+                      onAddToWishlist={handleAddToWishlist} // Pass onAddToWishlist here
                     />
                   ))}
                 </div>
@@ -103,9 +122,13 @@ const AestheticShop: React.FC = () => {
           <Route path="/category/stability" element={<StabilityPage />} />
           <Route path="/category/neutral" element={<NeutralPage />} />
           <Route path="/category/natural" element={<NaturalPage />} />
-          <Route path="/category/motioncontrol" element={<MotionControlPage />} />8
+          <Route path="/category/motioncontrol" element={<MotionControlPage />} />
           <Route path="/category/:categoryName" element={<CategoryPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route
+            path="/wishlist"
+            element={<Wishlist wishlistItems={wishlistItems} setWishlistItems={setWishlistItems} />}
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route

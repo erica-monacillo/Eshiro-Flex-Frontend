@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom"; // Use `useNavigate` in React Router v6
 
 interface CartItem {
   id: number;
@@ -16,6 +17,7 @@ interface ProductCardProps {
   productName: string;
   price: string;
   onAddToCart: (item: CartItem) => void;
+  onAddToWishlist: (item: CartItem) => void; // Function for adding to wishlist
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -24,8 +26,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productName,
   price,
   onAddToCart,
+  onAddToWishlist,
 }) => {
   const [isAdded, setIsAdded] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false); // Track if item is wishlisted
+  const navigate = useNavigate(); // Use `useNavigate` in React Router v6
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -45,19 +50,38 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
+  const handleAddToWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const item: CartItem = {
+      id,
+      productName,
+      price,
+      imageSrc,
+      quantity: 1,
+    };
+    onAddToWishlist(item); // Call parent function to add to wishlist
+
+    setIsWishlisted(true);
+    toast.success(`${productName} added to wishlist!`);
+  };
+
+  const handleWishlistPageRedirect = () => {
+    navigate("/wishlist"); // Redirect to wishlist page
+  };
+
   return (
     <div className="relative bg-gray-900 border border-gray-700 rounded-2xl p-4">
       {/* Wishlist & Swap Buttons */}
       <div className="absolute top-3 right-3 flex space-x-2">
         <button
-          className="p-1 text-gray-300 bg-gray-800 rounded-full hover:text-red-400"
-          onClick={(e) => e.stopPropagation()}
+          className={`p-1 ${isWishlisted ? "text-red-500" : "text-gray-300"} bg-gray-800 rounded-full hover:text-red-400`}
+          onClick={handleAddToWishlist} // Add to wishlist
         >
           <Heart size={18} />
         </button>
         <button
           className="p-1 text-gray-300 bg-gray-800 rounded-full hover:text-gray-400"
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleWishlistPageRedirect} // Redirect to wishlist page
         >
           ⇅
         </button>

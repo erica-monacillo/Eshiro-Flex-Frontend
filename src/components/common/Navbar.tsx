@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
-import { FiSearch, FiBell, FiUser, FiBox, FiShoppingCart } from "react-icons/fi";
+import { FiSearch, FiHeart, FiUser, FiBox, FiShoppingCart } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import NotificationPopup from "./NotificationPopup";
 import SearchBar from "./Searchbar";
 
 const Navbar: React.FC = () => {
@@ -10,15 +9,10 @@ const Navbar: React.FC = () => {
   const isCategoryPage = location.pathname.startsWith("/category"); // Check if on a category page
 
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
-  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const handleMouseEnter = () => setIsHeaderVisible(true);
   const handleMouseLeave = () => setIsHeaderVisible(false);
-
-  const toggleNotifications = () => {
-    setIsNotificationVisible((prev) => !prev);
-  };
 
   return (
     <div
@@ -59,9 +53,9 @@ const Navbar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <button onClick={toggleNotifications} aria-label="View Notifications">
-              <FiBell size={20} color="white" />
-            </button>
+            <Link to="/wishlist" title="Wishlist">
+              <FiHeart size={20} color="white" />
+            </Link>
           </li>
           <li>
             <Link to="/cart" title="Cart">
@@ -75,11 +69,6 @@ const Navbar: React.FC = () => {
           </li>
         </ul>
       </nav>
-
-      {/* Notification Pop-up */}
-      {isNotificationVisible && (
-        <NotificationPopup onClose={() => setIsNotificationVisible(false)} />
-      )}
 
       {/* Search Bar */}
       {isSearchVisible && (
