@@ -49,7 +49,6 @@ const CartPage: React.FC<{
     const item = cartItems.find((item) => item.id === id);
     return item ? acc + (parseFloat(item.price) || 0) * item.quantity : acc;
   }, 0);
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex flex-col items-center text-white">

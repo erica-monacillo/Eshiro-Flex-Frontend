@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const sampleProducts = [
+// Define the Product and CartItem interfaces
+interface Product {
+  image: string;
+  name: string;
+  price: string;
+}
+
+interface CartItem {
+  id: string;
+  productName: string;
+  price: string;
+  imageSrc: string;
+  quantity: number;
+}
+
+const sampleProducts: Product[] = [
   { image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReuSvOLob97ScxEzy_IhEvIw0KlFC1PGdFOw&s", name: "Poly", price: "₱89.99" },
   { image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-OVWKNExDQBV5Qq9JTeJdrB1XUKaMrjXoHg&s", name: "Product 2", price: "₱79.99" },
   { image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0u7OxzqjYZbbOkQ87nLWlq-BVPHMWy_Xptw&s", name: "Product 3", price: "₱69.99" },
@@ -15,6 +32,56 @@ const sampleProducts = [
 ];
 
 const StabilityPage: React.FC = () => {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]); // Define type for cartItems
+  const [wishlistItems, setWishlistItems] = useState<CartItem[]>([]); // Define type for wishlistItems
+  const [addedStatus, setAddedStatus] = useState<Record<string, boolean>>({}); // Track each product's added status to cart
+  const [wishlistStatus, setWishlistStatus] = useState<Record<string, boolean>>({}); // Track each product's wishlist status
+  const navigate = useNavigate(); // Use `useNavigate` in React Router v6
+
+  const handleAddToCart = (product: Product) => {
+    if (!addedStatus[product.name]) {
+      const item: CartItem = {
+        id: product.name,
+        productName: product.name,
+        price: product.price,
+        imageSrc: product.image,
+        quantity: 1,
+      };
+      setCartItems([...cartItems, item]);
+      setAddedStatus((prevStatus) => ({
+        ...prevStatus,
+        [product.name]: true,
+      }));
+
+      // Trigger success toast notification
+      toast.success(`${product.name} added to cart!`);
+    }
+  };
+
+  const handleAddToWishlist = (product: Product) => {
+    if (!wishlistStatus[product.name]) {
+      const item: CartItem = {
+        id: product.name,
+        productName: product.name,
+        price: product.price,
+        imageSrc: product.image,
+        quantity: 1,
+      };
+      setWishlistItems([...wishlistItems, item]);
+      setWishlistStatus((prevStatus) => ({
+        ...prevStatus,
+        [product.name]: true,
+      }));
+
+      // Trigger success toast notification
+      toast.success(`${product.name} added to wishlist!`);
+    }
+  };
+
+  const handleWishlistPageRedirect = () => {
+    navigate("/wishlist"); // Redirect to wishlist page
+  };
+
   return (
     <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 min-h-screen py-6">
       <div className="container mx-auto px-6">
@@ -22,7 +89,7 @@ const StabilityPage: React.FC = () => {
         <div className="mb-8">
           <img
             src="https://cdn.runrepeat.com/storage/gallery/buying_guide_primary/25/best-stability-running-shoes-001-22321862-960.jpg"
-            alt="Men's Apparel Banner"
+            alt=""
             className="w-full xl:w-screen h-64 object-cover rounded-xl shadow-lg"
             style={{ objectPosition: "40% 30%" }}
           />
@@ -40,10 +107,16 @@ const StabilityPage: React.FC = () => {
             >
               {/* Wishlist & Options Buttons */}
               <div className="absolute top-3 right-3 flex space-x-2">
-                <button className="p-1 text-gray-300 bg-gray-700 rounded-full shadow-sm hover:bg-gray-600 hover:text-red-400">
+                <button
+                  className={`p-1 ${wishlistStatus[product.name] ? "text-red-500" : "text-gray-300"} bg-gray-800 rounded-full hover:text-red-400`}
+                  onClick={() => handleAddToWishlist(product)} // Add to wishlist
+                >
                   <Heart size={18} />
                 </button>
-                <button className="p-1 text-gray-300 bg-gray-700 rounded-full shadow-sm hover:bg-gray-600 hover:text-gray-400">
+                <button
+                  className="p-1 text-gray-300 bg-gray-800 rounded-full hover:text-gray-400"
+                  onClick={handleWishlistPageRedirect} // Redirect to wishlist page
+                >
                   ⇅
                 </button>
               </div>
@@ -66,8 +139,17 @@ const StabilityPage: React.FC = () => {
               </div>
 
               {/* Add to Cart Button */}
-              <button className="mt-4 w-full bg-white text-black text-sm py-2 rounded-full shadow hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition">
-                <ShoppingCart size={16} className="mr-1 inline" /> ADD TO CART
+              <button
+                className={`mt-4 w-full ${
+                  addedStatus[product.name]
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-white text-black hover:bg-gray-300"
+                } text-sm py-2 rounded-full`}
+                onClick={() => handleAddToCart(product)}
+                disabled={addedStatus[product.name]}
+              >
+                <ShoppingCart size={16} className="mr-1 inline" />
+                {addedStatus[product.name] ? "Added" : "Add to Cart"}
               </button>
             </div>
           ))}
