@@ -8,10 +8,14 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
+  
     if (!authToken) {
-      navigate("/login"); // Redirect to login if no auth token
+      navigate("/login"); // Redirect if no token
     }
   }, [navigate]);
+  
+
+  
   // User information state
   const [userInfo, setUserInfo] = useState({
     name: "John Doe",
@@ -38,7 +42,7 @@ const UserProfile: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/";
+    navigate("/login");
   };
 
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);

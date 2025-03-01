@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "@/index.css";
+import { useEffect } from "react"; // Import useEffect
+
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      navigate("/profile"); // Redirect to profile if already logged in
+    }
+  }, [navigate]);
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (username && password) {
       localStorage.setItem("authToken", "exampleToken");
+      console.log("Stored authToken:", localStorage.getItem("authToken"));
       localStorage.setItem("username", username);
       navigate("/shop");
     } else {
@@ -74,7 +82,7 @@ const LoginPage: React.FC = () => {
           </button>
         </form>
         <div className="mt-4 text-center">
-          <span className="text-sm text-white">New to Shopee?</span>{" "}
+          <span className="text-sm text-white">New to Eshiro Flex?</span>{" "}
           <Link to="/signup" className="text-sm text-blue-500 hover:underline">Sign Up</Link>
         </div>
       </div>
