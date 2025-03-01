@@ -1,8 +1,17 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
   const [activeTab, setActiveTab] = useState("info");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login"); // Redirect to login if no auth token
+    }
+  }, [navigate]);
   // User information state
   const [userInfo, setUserInfo] = useState({
     name: "John Doe",

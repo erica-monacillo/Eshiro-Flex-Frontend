@@ -46,10 +46,11 @@ const AestheticShop: React.FC = () => {
             }
           />
           {/* Specific Category Pages */}
+          <Route path="/shop" element={<AestheticShop />} />
           <Route path="/category/stability" element={<StabilityPage />} />
           <Route path="/category/neutral" element={<NeutralPage />} />
           <Route path="/category/natural" element={<NaturalPage />} />
-          <Route path="/category/motioncontrol" element={<MotionControlPage />} />
+          <Route path="/category/motioncontrol" element={<MotionControlPage />} />8
 
           {/* Dynamic Category Page */}
           <Route path="/category/:categoryName" element={<CategoryPage />} />

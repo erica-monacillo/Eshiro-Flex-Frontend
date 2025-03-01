@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
     if (username && password) {
       localStorage.setItem("authToken", "exampleToken");
       localStorage.setItem("username", username);
-      navigate("/profile");
+      navigate("/shop");
     } else {
       alert("Please enter both username and password");
     }
