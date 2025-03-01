@@ -74,6 +74,21 @@ const SignUpPage: React.FC = () => {
           Sign Up
         </h2>
         <form>
+          {/* Email Field */}
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-white"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="w-full border border-gray-300 rounded-lg p-1 mt-1 focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
           {/* Username Field */}
           <div className="mb-4">
             <label
@@ -85,7 +100,7 @@ const SignUpPage: React.FC = () => {
             <input
               type="text"
               id="username"
-              className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg p-1 mt-1 focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -100,7 +115,22 @@ const SignUpPage: React.FC = () => {
             <input
               type="password"
               id="password"
-              className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg p-1 mt-1 focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Confirm Password Field */}
+          <div className="mb-4">
+            <label
+              htmlFor="confirm-password"
+              className="block text-sm font-medium text-white"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirm-password"
+              className="w-full border border-gray-300 rounded-lg p-1 mt-1 focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
