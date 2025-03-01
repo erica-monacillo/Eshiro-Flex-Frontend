@@ -31,9 +31,13 @@
 }
 /* Adjusted Cube Size */
 .logo-container {
+    min-height: 300px;
     width: 350px;
     height: 350px;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translateY(-50%);
     perspective: 1200px; /* Slightly deeper 3D effect */
     perspective-origin: center;
     overflow: visible;
@@ -49,6 +53,7 @@
 }
 
 .logo-wrapper {
+    
     width: 300px;
     height: 300px;
     position: absolute;

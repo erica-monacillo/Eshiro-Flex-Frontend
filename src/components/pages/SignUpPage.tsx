@@ -5,7 +5,8 @@ const SignUpPage: React.FC = () => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-r from-black via-gray-900 to-gray-700 p-4">
       {/* Left Section for Shopee Logo - Hidden on Small Screens */}
-      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5">
+      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
+
         <div className="logo-container">
           <div className="logo-wrapper flex flex-wrap justify-center">
             {['front', 'right', 'back', 'left'].map((face) => (

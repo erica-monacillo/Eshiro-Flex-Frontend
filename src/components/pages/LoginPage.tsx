@@ -21,8 +21,9 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">
       {/* Logo Section (Hidden on Small Screens) */}
-      <div className="hidden md:flex items-center justify-center w-full md:w-1/2">
-        <div className="logo-container perspective">
+      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
+
+        <div className="w-[250px] h-[250px] flex items-center justify-center">
           <div className="logo-wrapper">
             <div className="logo-face front">
               <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
@@ -41,7 +42,7 @@ const LoginPage: React.FC = () => {
       </div>
 
       {/* Login Form Section */}
-      <div className="p-8 rounded-2xl shadow-2xl w-full max-w-sm mt-10 md:mt-0" style={{
+      <div className="p-8 rounded-2xl shadow-2xl w-full max-w-sm md:w-1/2 lg:w-2/5" style={{
         background: "linear-gradient(to bottom, #121212, #383838)",
         border: "1px solid #444",
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)",
