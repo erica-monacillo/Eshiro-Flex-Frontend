@@ -99,10 +99,10 @@ const StabilityPage: React.FC = () => {
           {/* Wide Image */}
           <div className="mb-8">
             <img
-              src="https://th.bing.com/th/id/OIP.mditFcBkBUEnQU_eCLb8DQHaEc?rs=1&pid=ImgDetMain"
-              alt=""
-              className="w-full xl:w-screen h-64 object-cover rounded-xl shadow-lg"
-              style={{ objectPosition: "40% 30%" }}
+              src="https://runningshorts.com/wp-content/uploads/2023/08/what-is-stability-running-shoes-1692348928.jpeg"
+              alt="Stability Shoes"
+              className="w-full xl:w-screen h-64 object-cover rounded-xl shadow-lg mt-10"
+              style={{ objectPosition: "40% 90%" }}
             />
           </div>
   
