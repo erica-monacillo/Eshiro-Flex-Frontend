@@ -32,51 +32,62 @@ const sampleProducts = [
 ];
 
 const NeutralPage: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]); // Define type for cartItems
   const [wishlistItems, setWishlistItems] = useState<CartItem[]>([]); // Define type for wishlistItems
-  const [addedStatus, setAddedStatus] = useState<Record<string, boolean>>({}); // Track each product's added status to cart
+  const [addedStatus] = useState<Record<string, boolean>>({});; // Track each product's added status to cart
   const [wishlistStatus, setWishlistStatus] = useState<Record<string, boolean>>({}); // Track each product's wishlist status
   const navigate = useNavigate(); // Use `useNavigate` in React Router v6
 
   const handleAddToCart = (product: Product) => {
-    if (!addedStatus[product.name]) {
-      const item: CartItem = {
-        id: product.name,
-        productName: product.name,
-        price: product.price,
-        imageSrc: product.image,
-        quantity: 1,
-      };
-      setCartItems([...cartItems, item]);
-      setAddedStatus((prevStatus) => ({
-        ...prevStatus,
-        [product.name]: true,
-      }));
-
-      // Trigger success toast notification
+      // Retrieve existing cart items from local storage
+      const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    
+      // Check if product already exists in the cart
+      const existingItem = storedCart.find((item: CartItem) => item.id === product.name);
+    
+      if (existingItem) {
+        // If the item is already in the cart, update its quantity
+        existingItem.quantity += 1;
+      } else {
+        // If the item is new, add it to the cart
+        const newItem: CartItem = {
+          id: product.name,
+          productName: product.name,
+          price: product.price,
+          imageSrc: product.image,
+          quantity: 1,
+        };
+        storedCart.push(newItem);
+      }
+    
+      // Save the updated cart back to local storage
+      localStorage.setItem("cart", JSON.stringify(storedCart));
+    
+      // Show a success notification
       toast.success(`${product.name} added to cart!`);
-    }
-  };
+    };
 
   const handleAddToWishlist = (product: Product) => {
-    if (!wishlistStatus[product.name]) {
-      const item: CartItem = {
-        id: product.name,
-        productName: product.name,
-        price: product.price,
-        imageSrc: product.image,
-        quantity: 1,
-      };
-      setWishlistItems([...wishlistItems, item]);
-      setWishlistStatus((prevStatus) => ({
-        ...prevStatus,
-        [product.name]: true,
-      }));
-
-      // Trigger success toast notification
-      toast.success(`${product.name} added to wishlist!`);
-    }
-  };
+      if (!wishlistStatus[product.name]) {
+        const item: CartItem = {
+          id: product.name,
+          productName: product.name,
+          price: product.price,
+          imageSrc: product.image,
+          quantity: 1,
+        };
+    
+        const updatedWishlist = [...wishlistItems, item]; // Update wishlist state
+        setWishlistItems(updatedWishlist);
+        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // ✅ Save to localStorage
+    
+        setWishlistStatus((prevStatus) => ({
+          ...prevStatus,
+          [product.name]: true,
+        }));
+    
+        toast.success(`${product.name} added to wishlist!`);
+      }
+    };
 
   const handleWishlistPageRedirect = () => {
     navigate("/wishlist"); // Redirect to wishlist page

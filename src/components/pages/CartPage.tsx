@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CartItem } from "./AestheticShop";
 
-const CartPage: React.FC<{
+interface CartItem {
+  id: number;
+  productName: string;
+  price: string;
+  imageSrc: string;
+  quantity: number;
+}
+
+interface CartPageProps {
   cartItems: CartItem[];
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
-}> = ({ cartItems, setCartItems }) => {
+}
+
+const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   const navigate = useNavigate();
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]); // Fix: Change to number[]
+
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCartItems(storedCart);
+  }, [setCartItems]);
+
+  const updateCartStorage = (updatedCart: CartItem[]) => {
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
 
   const handleCheckout = () => {
     const itemsToCheckout = cartItems.filter((item) =>
@@ -21,20 +40,18 @@ const CartPage: React.FC<{
   };
 
   const handleRemove = (id: number) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    setSelectedItems((prevSelected) =>
-      prevSelected.filter((itemId) => itemId !== id)
-    );
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    updateCartStorage(updatedCart);
+    setSelectedItems((prevSelected) => prevSelected.filter((itemId) => itemId !== id));
   };
 
   const handleQuantityChange = (id: number, increment: boolean) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + (increment ? 1 : -1)) }
-          : item
-      )
+    const updatedCart = cartItems.map((item) =>
+      item.id === id
+        ? { ...item, quantity: Math.max(1, item.quantity + (increment ? 1 : -1)) }
+        : item
     );
+    updateCartStorage(updatedCart);
   };
 
   const handleSelectItem = (id: number) => {
@@ -43,7 +60,7 @@ const CartPage: React.FC<{
         ? prevSelected.filter((itemId) => itemId !== id)
         : [...prevSelected, id]
     );
-  };
+  }
 
   const total = selectedItems.reduce((acc, id) => {
     const item = cartItems.find((item) => item.id === id);
@@ -54,7 +71,6 @@ const CartPage: React.FC<{
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex flex-col items-center text-white">
       <h1 className="text-3xl font-semibold mt-20 mb-8 text-gray-200">Shopping Cart</h1>
       <div className="w-full max-w-6xl mx-5 mt-0 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Cart Items Section */}
         <div className="col-span-2 bg-gray-800 rounded-lg shadow-md p-6">
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
@@ -114,7 +130,6 @@ const CartPage: React.FC<{
           )}
         </div>
 
-        {/* Summary Section */}
         <div className="bg-gray-800 rounded-lg shadow-md p-6">
           <h3 className="text-xl font-semibold text-gray-200">Summary</h3>
           <div className="mt-4 space-y-4">

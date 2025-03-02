@@ -57,7 +57,7 @@ const AestheticShop: React.FC = () => {
   const handleAddToWishlist = (item: Product) => {
     setWishlistItems((prevItems) => {
       if (!prevItems.find((wishlistItem) => wishlistItem.id === item.id)) {
-        return [...prevItems, item];
+        return [...prevItems, item]; 
       }
       return prevItems; // Avoid duplicates
     });
@@ -131,10 +131,7 @@ const AestheticShop: React.FC = () => {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route
-            path="/cart"
-            element={<CartPage cartItems={cartItems} setCartItems={setCartItems} />}
-          />
+          <Route path="/cart" element={<CartPage cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route
             path="*"

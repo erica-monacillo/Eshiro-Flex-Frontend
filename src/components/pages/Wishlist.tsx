@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface Product {
   id: number;
@@ -13,8 +13,20 @@ interface WishlistProps {
 }
 
 const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) => {
+  
+  // ✅ Load Wishlist from Local Storage on Page Load
+  useEffect(() => {
+    const storedWishlist = localStorage.getItem("wishlist");
+    if (storedWishlist) {
+      setWishlistItems(JSON.parse(storedWishlist));
+    }
+  }, [setWishlistItems]);
+
+  // ✅ Remove Item from Wishlist and Update Local Storage
   const removeFromWishlist = (id: number) => {
-    setWishlistItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    const updatedWishlist = wishlistItems.filter((item) => item.id !== id);
+    setWishlistItems(updatedWishlist);
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // Update Local Storage
   };
 
   return (
