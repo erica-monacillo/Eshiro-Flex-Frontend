@@ -1,15 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUpPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleSignUp = (event: React.FormEvent) => {
+    event.preventDefault();
+    // Add sign-up logic here (e.g., form validation, API call, etc.)
+    navigate("/login"); // Redirect to login page after successful sign-up
+  };
+
   return (
     <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-r from-black via-gray-900 to-gray-700 p-4">
       {/* Left Section for Shopee Logo - Hidden on Small Screens */}
       <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
-
         <div className="logo-container">
           <div className="logo-wrapper flex flex-wrap justify-center">
-            {['front', 'right', 'back', 'left'].map((face) => (
+            {["front", "right", "back", "left"].map((face) => (
               <div key={face} className={`logo-face ${face}`}>
                 <img
                   src="https://i.imghippo.com/files/chP3718kF.png"
@@ -30,14 +37,14 @@ const SignUpPage: React.FC = () => {
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)"
       }}>
         <h2 className="text-3xl font-extrabold mb-6 text-center text-white">Sign Up</h2>
-        <form className="w-full">
-          {['email', 'username', 'password', 'confirm-password'].map((field, index) => (
+        <form className="w-full" onSubmit={handleSignUp}>
+          {["email", "username", "password", "confirm-password"].map((field, index) => (
             <div key={index} className="mb-4">
               <label htmlFor={field} className="block text-sm font-medium text-white capitalize">
-                {field.replace('-', ' ')}
+                {field.replace("-", " ")}
               </label>
               <input
-                type={field.includes('password') ? 'password' : 'text'}
+                type={field.includes("password") ? "password" : "text"}
                 id={field}
                 className="w-full border border-gray-300 rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500"
               />
