@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -32,10 +32,42 @@ const sampleProducts: Product[] = [
 ];
 
 const StabilityPage: React.FC = () => {
-  const [wishlistItems, setWishlistItems] = useState<CartItem[]>([]); // Define type for wishlistItems
-  const [addedStatus] = useState<Record<string, boolean>>({});; // Track each product's added status to cart
-  const [wishlistStatus, setWishlistStatus] = useState<Record<string, boolean>>({}); // Track each product's wishlist status
-  const navigate = useNavigate(); // Use `useNavigate` in React Router v6
+  const [cartItems, setCartItems] = useState<CartItem[]>([]); 
+  const [wishlistItems, setWishlistItems] = useState<CartItem[]>([]);
+  const [addedStatus, setAddedStatus] = useState<Record<string, boolean>>({});
+  const [wishlistStatus, setWishlistStatus] = useState<Record<string, boolean>>({}); 
+  const navigate = useNavigate();
+
+  // Load cart and wishlist items from localStorage on component mount
+  useEffect(() => {
+    // Load cart items
+    const savedCartItems = localStorage.getItem('cartItems');
+    if (savedCartItems) {
+      const parsedCartItems = JSON.parse(savedCartItems);
+      setCartItems(parsedCartItems);
+      
+      // Create status map for cart items
+      const cartStatusMap: Record<string, boolean> = {};
+      parsedCartItems.forEach((item: CartItem) => {
+        cartStatusMap[item.productName] = true;
+      });
+      setAddedStatus(cartStatusMap);
+    }
+    
+    // Load wishlist items
+    const savedWishlistItems = localStorage.getItem('wishlistItems');
+    if (savedWishlistItems) {
+      const parsedWishlistItems = JSON.parse(savedWishlistItems);
+      setWishlistItems(parsedWishlistItems);
+      
+      // Create status map for wishlist items
+      const wishlistStatusMap: Record<string, boolean> = {};
+      parsedWishlistItems.forEach((item: CartItem) => {
+        wishlistStatusMap[item.productName] = true;
+      });
+      setWishlistStatus(wishlistStatusMap);
+    }
+  }, []);
 
   const handleAddToCart = (product: Product) => {
     // Retrieve existing cart items from local storage
@@ -56,14 +88,21 @@ const StabilityPage: React.FC = () => {
         imageSrc: product.image,
         quantity: 1,
       };
-      storedCart.push(newItem);
+      
+      const updatedCartItems = [...cartItems, item];
+      setCartItems(updatedCartItems);
+      
+      // Update localStorage with new cart items
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      
+      setAddedStatus((prevStatus) => ({
+        ...prevStatus,
+        [product.name]: true,
+      }));
+
+      // Trigger success toast notification
+      toast.success(`${product.name} added to cart!`);
     }
-  
-    // Save the updated cart back to local storage
-    localStorage.setItem("cart", JSON.stringify(storedCart));
-  
-    // Show a success notification
-    toast.success(`${product.name} added to cart!`);
   };
 
   const handleAddToWishlist = (product: Product) => {
@@ -75,11 +114,13 @@ const StabilityPage: React.FC = () => {
         imageSrc: product.image,
         quantity: 1,
       };
-  
-      const updatedWishlist = [...wishlistItems, item]; // Update wishlist state
-      setWishlistItems(updatedWishlist);
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // ✅ Save to localStorage
-  
+      
+      const updatedWishlistItems = [...wishlistItems, item];
+      setWishlistItems(updatedWishlistItems);
+      
+      // Update localStorage with new wishlist items
+      localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems));
+      
       setWishlistStatus((prevStatus) => ({
         ...prevStatus,
         [product.name]: true,
@@ -91,12 +132,34 @@ const StabilityPage: React.FC = () => {
   
 
   const handleWishlistPageRedirect = () => {
-    navigate("/wishlist"); // Redirect to wishlist page
+    navigate("/wishlist");
+  };
+  
+  const handleCartPageRedirect = () => {
+    navigate("/cart");
   };
 
   return (
     <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 min-h-screen py-6">
       <div className="container mx-auto px-6">
+        {/* Navigation buttons for cart and wishlist */}
+        <div className="flex justify-end mb-4 space-x-4">
+          <button 
+            onClick={handleCartPageRedirect}
+            className="flex items-center bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+          >
+            <ShoppingCart size={18} className="mr-2" />
+            Cart ({cartItems.length})
+          </button>
+          <button 
+            onClick={handleWishlistPageRedirect}
+            className="flex items-center bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+          >
+            <Heart size={18} className="mr-2" />
+            Wishlist ({wishlistItems.length})
+          </button>
+        </div>
+        
         {/* Wide Image */}
         <div className="mb-8">
           <img
@@ -121,13 +184,13 @@ const StabilityPage: React.FC = () => {
               <div className="absolute top-3 right-3 flex space-x-2">
                 <button
                   className={`p-1 ${wishlistStatus[product.name] ? "text-red-500" : "text-gray-300"} bg-gray-800 rounded-full hover:text-red-400`}
-                  onClick={() => handleAddToWishlist(product)} // Add to wishlist
+                  onClick={() => handleAddToWishlist(product)}
                 >
                   <Heart size={18} />
                 </button>
                 <button
                   className="p-1 text-gray-300 bg-gray-800 rounded-full hover:text-gray-400"
-                  onClick={handleWishlistPageRedirect} // Redirect to wishlist page
+                  onClick={handleWishlistPageRedirect}
                 >
                   ⇅
                 </button>
