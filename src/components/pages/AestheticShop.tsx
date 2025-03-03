@@ -20,6 +20,8 @@ import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
 import Wishlist from "./Wishlist";
 
+//import routes from "../../routes/routes";
+
 export interface CartItem {
   id: number;
   productName: string;
