@@ -3,40 +3,19 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("info");
   const navigate = useNavigate();
-  
-  // Initialize activeTab from sessionStorage
-  const [activeTab, setActiveTab] = useState(() => {
-    return sessionStorage.getItem("activeTab") || "info";
-  });
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    sessionStorage.setItem("activeTab", tab);
-  };
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
+  
     if (!authToken) {
-      navigate("/login", { replace: true }); // Prevents adding to browser history
-      return; // Stop further execution if user is redirected
+      navigate("/login"); // Redirect if no token
     }
-
-    const handlePopState = () => {
-      const savedTab = sessionStorage.getItem("activeTab") || "info";
-      setActiveTab(savedTab);
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
   }, [navigate]);
+  
 
-  useEffect(() => {
-    sessionStorage.setItem("activeTab", activeTab); // Keep sessionStorage updated
-  }, [activeTab]);
-
+  
   // User information state
   const [userInfo, setUserInfo] = useState({
     name: "John Doe",
@@ -251,7 +230,7 @@ const UserProfile: React.FC = () => {
         </div>
         <ul className="p-4 space-y-4">
           <li
-            onClick={() => handleTabChange("info")}
+            onClick={() => setActiveTab("info")}
             className={`cursor-pointer p-3 rounded-lg ${
               activeTab === "info"
                 ? "bg-blue-600"
@@ -261,7 +240,7 @@ const UserProfile: React.FC = () => {
             User Information
           </li>
           <li
-            onClick={() => handleTabChange("orders")}
+            onClick={() => setActiveTab("orders")}
             className={`cursor-pointer p-3 rounded-lg ${
               activeTab === "orders"
                 ? "bg-blue-600"
@@ -271,7 +250,7 @@ const UserProfile: React.FC = () => {
             My Orders
           </li>
           <li
-            onClick={() => handleTabChange("payment")}
+            onClick={() => setActiveTab("payment")}
             className={`cursor-pointer p-3 rounded-lg ${
               activeTab === "payment"
                 ? "bg-blue-600"
@@ -281,7 +260,7 @@ const UserProfile: React.FC = () => {
             Payment Method
           </li>
           <li
-            onClick={() => handleTabChange("settings")}
+            onClick={() => setActiveTab("settings")}
             className={`cursor-pointer p-3 rounded-lg ${
               activeTab === "settings"
                 ? "bg-blue-600"
