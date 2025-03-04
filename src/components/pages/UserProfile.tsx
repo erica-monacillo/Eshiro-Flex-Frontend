@@ -1,39 +1,91 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
   const [activeTab, setActiveTab] = useState("info");
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    address: "",
+    email: "",
+    phone: "",
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-  
+
     if (!authToken) {
       navigate("/login"); // Redirect if no token
+      return;
     }
+
+    // Fetch user profile data
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch("/api/user/profile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserInfo({
+            name: data.name || "N/A",
+            address: data.address || "N/A",
+            email: data.email || "N/A",
+            phone: data.phone || "N/A",
+          });
+          setSelectedPayment(data.paymentMethod || null);
+        } else {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        navigate("/login");
+      }
+    };
+
+    fetchUserProfile();
   }, [navigate]);
-  
-
-  
-  // User information state
-  const [userInfo, setUserInfo] = useState({
-    name: "John Doe",
-    address: "1234 Elm Street, Springfield",
-    email: "johndoe@example.com",
-    phone: "123-456-7890",
-  });
-
-  const [isEditing, setIsEditing] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ ...userInfo, paymentMethod: selectedPayment }),
+      });
+
+      if (response.ok) {
+        alert("User information updated successfully!");
+      } else {
+        console.error("Failed to update user information");
+      }
+    } catch (error) {
+      console.error("Error saving user information:", error);
+    }
+
     setIsEditing(false);
-    alert("User information updated successfully!");
   };
 
   const handleCancel = () => {
@@ -44,8 +96,6 @@ const UserProfile: React.FC = () => {
     localStorage.clear();
     navigate("/login");
   };
-
-  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -97,6 +147,17 @@ const UserProfile: React.FC = () => {
                     className="w-full mt-2 p-3 rounded-lg bg-gray-800 text-gray-200 border border-gray-700 focus:ring focus:ring-blue-600"
                   />
                 </label>
+                <label className="block">
+                  <span className="text-gray-400">Payment Method:</span>
+                  <input
+                    type="text"
+                    name="paymentMethod"
+                    value={selectedPayment || ""}
+                    onChange={(e) => setSelectedPayment(e.target.value)}
+                    placeholder="Enter payment method (e.g., Cash, Credit Card)"
+                    className="w-full mt-2 p-3 rounded-lg bg-gray-800 text-gray-200 border border-gray-700 focus:ring focus:ring-blue-600"
+                  />
+                </label>
                 <div className="flex justify-end gap-4">
                   <button
                     type="button"
@@ -128,6 +189,9 @@ const UserProfile: React.FC = () => {
                 <p>
                   <strong>Phone:</strong> {userInfo.phone}
                 </p>
+                <p>
+                  <strong>Payment Method:</strong> {selectedPayment || "Not specified"}
+                </p>
                 <button
                   onClick={() => setIsEditing(true)}
                   className="mt-4 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
@@ -136,83 +200,6 @@ const UserProfile: React.FC = () => {
                 </button>
               </div>
             )}
-          </div>
-        );
-      case "orders":
-        return (
-          <div>
-            <h2 className="text-3xl font-semibold text-gray-200 mb-4">
-              My Orders
-            </h2>
-            <p className="text-gray-400">No orders yet.</p>
-          </div>
-        );
-        case "payment":
-            return (
-              <div>
-                <h2 className="text-3xl font-semibold text-gray-200 mb-4">
-                  Payment Method
-                </h2>
-                <p className="text-gray-400 mb-6">
-                  Select your preferred payment method from the list below.
-                </p>
-                <div className="space-y-4">
-                  {["Credit Card", "PayPal", "GCash", "PayMaya", "Bank Transfer"].map(
-                    (method, index) => (
-                      <div
-                        key={index}
-                        className={`flex items-center justify-between p-4 bg-gray-700 rounded-lg ${
-                          selectedPayment === method
-                            ? "border-2 border-blue-500"
-                            : "hover:border-gray-500 border border-transparent"
-                        }`}
-                        onClick={() => setSelectedPayment(method)}
-                      >
-                        <p className="text-lg font-medium text-gray-300">{method}</p>
-                        {selectedPayment === method && (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-blue-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    )
-                  )}
-                </div>
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={() =>
-                      alert(`Payment method selected: ${selectedPayment || "None"}`)
-                    }
-                    className={`py-2 px-6 text-white rounded-lg ${
-                      selectedPayment
-                        ? "bg-blue-600 hover:bg-blue-500"
-                        : "bg-gray-600 cursor-not-allowed"
-                    }`}
-                    disabled={!selectedPayment}
-                  >
-                    Confirm Payment Method
-                  </button>
-                </div>
-              </div>
-            );
-      case "settings":
-        return (
-          <div>
-            <h2 className="text-3xl font-semibold text-gray-200 mb-4">
-              Settings
-            </h2>
-            <p className="text-gray-400">Adjust your preferences here.</p>
           </div>
         );
       default:
@@ -232,42 +219,10 @@ const UserProfile: React.FC = () => {
           <li
             onClick={() => setActiveTab("info")}
             className={`cursor-pointer p-3 rounded-lg ${
-              activeTab === "info"
-                ? "bg-blue-600"
-                : "hover:bg-gray-700"
+              activeTab === "info" ? "bg-blue-600" : "hover:bg-gray-700"
             }`}
           >
             User Information
-          </li>
-          <li
-            onClick={() => setActiveTab("orders")}
-            className={`cursor-pointer p-3 rounded-lg ${
-              activeTab === "orders"
-                ? "bg-blue-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            My Orders
-          </li>
-          <li
-            onClick={() => setActiveTab("payment")}
-            className={`cursor-pointer p-3 rounded-lg ${
-              activeTab === "payment"
-                ? "bg-blue-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            Payment Method
-          </li>
-          <li
-            onClick={() => setActiveTab("settings")}
-            className={`cursor-pointer p-3 rounded-lg ${
-              activeTab === "settings"
-                ? "bg-blue-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            Settings
           </li>
           <li
             onClick={handleLogout}

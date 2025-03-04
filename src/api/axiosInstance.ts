@@ -10,9 +10,8 @@ const api = axios.create({
 
 // Function to handle user login
 export const login = async (email: string, password: string) => {
-  const response = await api.post("/login", { email, password });
+  const response = await api.post("/login/", { username: email, password }); // Use `api` instead of `axiosInstance` and map email to username
   return response.data; // Return the data, and the calling code can handle errors
 };
-
 
 export default api; // Export the axios instance

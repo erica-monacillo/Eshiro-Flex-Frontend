@@ -19,21 +19,23 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
+  
     if (!username || !password) {
       setError("Please enter both username and password");
       return;
     }
-
+  
     try {
-      const token = await login(username, password); // ✅ Use the imported login function
+      const token = await login(username, password); // Call backend
       if (token) {
-        navigate("/shop"); // ✅ Redirect user after successful login
+        localStorage.setItem("authToken", token); // Save token for authenticated requests
+        navigate("/shop"); // Redirect on success
       }
     } catch (error: unknown) {
-      setError((error as Error).message);
+      setError((error as Error).message); // Show error to the user
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">

@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
+
 // Fetch Products
 export const fetchProducts = async () => {
   const response = await axiosInstance.get("/products/");
@@ -31,9 +32,9 @@ export const fetchWishlistItems = async (userId: number) => {
 };
 
 // User Login
-export const loginUser = async (credentials: { email: string; password: string }) => {
-  const response = await axiosInstance.post("/login/", credentials);
-  return response.data;
+export const login = async (username: string, password: string) => {
+  const response = await axiosInstance.post("/api/login/", { username, password });
+  return response.data.token;
 };
 
 // User Signup
