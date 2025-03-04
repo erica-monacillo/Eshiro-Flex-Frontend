@@ -1,54 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { login } from "@/api/axiosInstance"; // ✅ Import the login function
 import "@/index.css";
-import { useEffect } from "react"; // Import useEffect
-
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
-      navigate("/profile"); // Redirect to profile if already logged in
+      navigate("/profile");
     }
   }, [navigate]);
-  const handleLogin = (e: React.FormEvent) => {
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username && password) {
-      localStorage.setItem("authToken", "exampleToken");
-      console.log("Stored authToken:", localStorage.getItem("authToken"));
-      localStorage.setItem("username", username);
-      navigate("/shop");
-    } else {
-      alert("Please enter both username and password");
+    setError(null);
+
+    if (!username || !password) {
+      setError("Please enter both username and password");
+      return;
+    }
+
+    try {
+      const token = await login(username, password); // ✅ Use the imported login function
+      if (token) {
+        navigate("/shop"); // ✅ Redirect user after successful login
+      }
+    } catch (error: unknown) {
+      setError((error as Error).message);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">
-      {/* Logo Section (Hidden on Small Screens) */}
-      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
-
-        <div className="w-[250px] h-[250px] flex items-center justify-center">
-          <div className="logo-wrapper">
-            <div className="logo-face front">
-              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
-            </div>
-            <div className="logo-face right">
-              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
-            </div>
-            <div className="logo-face back">
-              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
-            </div>
-            <div className="logo-face left">
-              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Login Form Section */}
       <div className="p-8 rounded-2xl shadow-2xl w-full max-w-sm md:w-1/2 lg:w-2/5" style={{
         background: "linear-gradient(to bottom, #121212, #383838)",
@@ -56,6 +44,7 @@ const LoginPage: React.FC = () => {
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)",
       }}>
         <h2 className="text-3xl font-extrabold mb-6 text-center text-white">Log In</h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-white">Email or Username</label>

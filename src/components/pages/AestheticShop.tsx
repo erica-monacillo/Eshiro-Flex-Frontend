@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,8 +19,7 @@ import CartPage from "./CartPage";
 import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
 import Wishlist from "./Wishlist";
-
-//import routes from "../../routes/routes";
+import { fetchProducts } from "../../api/apiService"; // Import API call function
 
 export interface CartItem {
   id: number;
@@ -40,6 +39,26 @@ export interface Product {
 const AestheticShop: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const data = await fetchProducts(); // Fetch data from API
+        setProducts(data); // Update state with fetched products
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setError("Failed to load products.");
+        setLoading(false);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   const handleAddToCart = (item: CartItem) => {
     setCartItems((prevItems) => {
@@ -61,23 +80,13 @@ const AestheticShop: React.FC = () => {
       if (!prevItems.find((wishlistItem) => wishlistItem.id === item.id)) {
         return [...prevItems, item]; 
       }
-      return prevItems; // Avoid duplicates
+      return prevItems;
     });
   };
 
-  const products = Array(25)
-    .fill(null)
-    .map((_, index) => ({
-      id: index + 1,
-      productName: `Product ${index + 1}`,
-      price: `₱${(index + 1) * 10}`,
-      imageSrc:
-        "https://media.assettype.com/evoindia%2Fimport%2F2018%2F07%2FSuzuki-Jimny-2.jpg",
-    }));
-
   return (
     <div className="bg-gradient-to-r from-black via-gray-900 to-gray-700 text-gray-100 min-h-screen flex flex-col">
-      {/* Global ToastContainer */}
+      {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -103,19 +112,25 @@ const AestheticShop: React.FC = () => {
                 <HeroSection />
                 <Categories />
                 <WhatsNew />
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4 mt-4">
-                  {products.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      imageSrc={product.imageSrc}
-                      productName={product.productName}
-                      price={product.price}
-                      onAddToCart={handleAddToCart}
-                      onAddToWishlist={handleAddToWishlist} // Pass onAddToWishlist here
-                    />
-                  ))}
-                </div>
+                {loading ? (
+                  <p className="text-center text-gray-300">Loading products...</p>
+                ) : error ? (
+                  <p className="text-center text-red-500">{error}</p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4 mt-4">
+                    {products.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        imageSrc={product.imageSrc}
+                        productName={product.productName}
+                        price={product.price}
+                        onAddToCart={handleAddToCart}
+                        onAddToWishlist={handleAddToWishlist}
+                      />
+                    ))}
+                  </div>
+                )}
               </>
             }
           />
