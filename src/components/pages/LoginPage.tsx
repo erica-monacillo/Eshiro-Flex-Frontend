@@ -35,10 +35,28 @@ const LoginPage: React.FC = () => {
       setError((error as Error).message); // Show error to the user
     }
   };
-  
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">
+           {/* Logo Section (Hidden on Small Screens) */}
+      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
+
+        <div className="w-[250px] h-[250px] flex items-center justify-center">
+          <div className="logo-wrapper">
+            <div className="logo-face front">
+              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
+            </div>
+            <div className="logo-face right">
+              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
+            </div>
+            <div className="logo-face back">
+              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
+            </div>
+            <div className="logo-face left">
+              <img src="https://i.imghippo.com/files/chP3718kF.png" alt="" className="logo-image" />
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Login Form Section */}
       <div className="p-8 rounded-2xl shadow-2xl w-full max-w-sm md:w-1/2 lg:w-2/5" style={{
         background: "linear-gradient(to bottom, #121212, #383838)",
