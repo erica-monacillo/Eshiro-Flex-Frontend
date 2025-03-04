@@ -14,6 +14,17 @@ const UserProfile: React.FC = () => {
     }
   }, [navigate]);
   
+  useEffect(() => {
+    const handleBackButton = (event: PopStateEvent) => {
+      event.preventDefault();
+      navigate(-1);
+    };
+    window.addEventListener("popstate", handleBackButton);
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, [navigate]);
+  
 
   
   // User information state
