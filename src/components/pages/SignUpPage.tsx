@@ -92,7 +92,7 @@ const SignUpPage: React.FC = () => {
                 name={field}
                 value={formData[field as keyof typeof formData]}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 text-black rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500"
               />
             </div>
           ))}

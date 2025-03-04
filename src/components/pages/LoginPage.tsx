@@ -68,11 +68,11 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-white">Email or Username</label>
-            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full border border-gray-300 rounded-md p-2 mt-1" />
+            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full border border-gray-300  text-black rounded-md p-2 mt-1" />
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border border-gray-300 rounded-md p-2 mt-1" />
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border border-gray-300  text-black rounded-md p-2 mt-1" />
           </div>
           <button type="submit" className="w-full py-3 px-4 rounded-lg font-bold text-white" style={{
             backgroundImage: "linear-gradient(to right, #6a11cb, #2575fc)",
