@@ -8,10 +8,30 @@ const api = axios.create({
   },
 });
 
+// Add an interceptor to include the Authorization token in headers
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    if (token) {
+      config.headers.Authorization = `Token ${token}`; // Attach token to the Authorization header
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Function to handle user login
 export const login = async (email: string, password: string) => {
-  const response = await api.post("/login/", { username: email, password }); // Use `api` instead of `axiosInstance` and map email to username
+  const response = await api.post("/login/", { username: email, password }); // Use `api` and map email to username
+  // Save the token to localStorage upon successful login
+  if (response.data.token) {
+    localStorage.setItem("token", response.data.token);
+    console.log(response.data.token);
+  }
   return response.data; // Return the data, and the calling code can handle errors
 };
 
-export default api; // Export the axios instance
+// Export the axios instance
+export default api;

@@ -21,6 +21,7 @@ import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
 import Wishlist from "./Wishlist";
 import { fetchProducts } from "../../api/apiService"; // Import API call function
+import ProductPage from "../pages/ProductPage";
 
 export interface CartItem {
   id: number;
