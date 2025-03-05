@@ -95,3 +95,7 @@
     95%, 100% { transform: rotateY(-360deg); }  
 }
 
+.product-page {
+    margin-top: 60px; /* Makes space for Navbar if it's fixed */
+    padding: 20px;
+  }

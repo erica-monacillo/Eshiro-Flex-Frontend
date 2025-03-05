@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
             </button>
           </li>
           <li>
-            <Link to="/products" title="Products">
+            <Link to="/product" title="Products">
               <FiBox size={20} color="white" />
             </Link>
           </li>

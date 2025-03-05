@@ -20,6 +20,7 @@ import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
 import Wishlist from "./Wishlist";
 import { fetchProducts } from "../../api/apiService"; // Import API call function
+import ProductPage from "../pages/ProductPage";
 
 export interface CartItem {
   id: number;
@@ -148,6 +149,7 @@ const AestheticShop: React.FC = () => {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/product" element={<ProductPage />} />
           <Route path="/cart" element={<CartPage cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route
