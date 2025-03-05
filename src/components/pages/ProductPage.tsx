@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import axiosInstance from "@/api/axiosInstance"; // Import the axios instance
+import { toast } from "react-toastify";
+//import { useNavigate } from "react-router-dom";
+
 
 // Define the Product interface
 interface Product {
@@ -15,13 +18,22 @@ interface Product {
   created_at: string;
 }
 
+interface CartItem {
+  id: string;
+  productName: string;
+  price: string;
+  imageSrc: string;
+  quantity: number;
+}
+
 const ProductPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [wishlist, setWishlist] = useState<number[]>([]);
-  const [cart, setCart] = useState<number[]>([]);
+  const [wishlist] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [addedStatus] = useState<Record<string, boolean>>({});; // Track each product's added status to cart
-
+  const [wishlistStatus, setWishlistStatus] = useState<Record<string, boolean>>({}); // Track each product's wishlist status
+  const [wishlistItems, setWishlistItems] = useState<CartItem[]>([]); // Define type for wishlistItems
+ // const navigate = useNavigate(); // Use `useNavigate` in React Router v6
 
   // Fetch products from the backend API
   useEffect(() => {
@@ -49,19 +61,61 @@ const ProductPage: React.FC = () => {
   }, []);
 
   // Add product to wishlist
-  const handleAddToWishlist = (productId: number) => {
-    setWishlist((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
+  const handleAddToWishlist = (product: Product) => {
+    if (!wishlistStatus[product.name]) {
+      const item: CartItem = {
+        id: product.name,
+        productName: product.name,
+        price: product.price,
+        imageSrc: product.image_url,
+        quantity: 1,
+      };
+  
+      const updatedWishlist = [...wishlistItems, item]; // Update wishlist state
+      setWishlistItems(updatedWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // ✅ Save to localStorage
+  
+      setWishlistStatus((prevStatus) => ({
+        ...prevStatus,
+        [product.name]: true,
+      }));
+  
+      toast.success(`${product.name} added to wishlist!`);
+    }
   };
 
+//  const handleWishlistPageRedirect = () => {
+//    navigate("/wishlist"); // Redirect to wishlist page
+//  };
+
   // Add product to cart
-  const handleAddToCart = (productId: number) => {
-    if (!cart.includes(productId)) {
-      setCart([...cart, productId]);
+  const handleAddToCart = (product: Product) => {
+    // Retrieve existing cart items from local storage
+    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  
+    // Check if product already exists in the cart
+    const existingItem = storedCart.find((item: CartItem) => item.id === product.name);
+  
+    if (existingItem) {
+      // If the item is already in the cart, update its quantity
+      existingItem.quantity += 1;
+    } else {
+      // If the item is new, add it to the cart
+      const newItem: CartItem = {
+        id: product.name,
+        productName: product.name,
+        price: product.price,
+        imageSrc: product.image_url,
+        quantity: 1,
+      };
+      storedCart.push(newItem);
     }
+  
+    // Save the updated cart back to local storage
+    localStorage.setItem("cart", JSON.stringify(storedCart));
+  
+    // Show a success notification
+    toast.success(`${product.name} added to cart!`);
   };
 
   // Fallback for loading or no products
@@ -90,7 +144,7 @@ const ProductPage: React.FC = () => {
                     ? "text-red-500"
                     : "text-gray-300"
                 } bg-gray-800 rounded-full hover:text-red-400`}
-                onClick={() => handleAddToWishlist(product.id)}
+                onClick={() => handleAddToWishlist(product)}
               >
                 <Heart size={18} />
               </button>
@@ -132,7 +186,7 @@ const ProductPage: React.FC = () => {
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-white text-black hover:bg-gray-300"
                 } text-sm py-2 rounded-full`}
-                onClick={() => handleAddToCart(product.id)}
+                onClick={() => handleAddToCart(product)}
                 disabled={addedStatus[product.name]}
               >
                 <ShoppingCart size={16} className="mr-1 inline" />
