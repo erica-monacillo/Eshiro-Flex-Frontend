@@ -34,7 +34,7 @@ const SignUpPage: React.FC = () => {
       if (axios.isAxiosError(error)) {
         console.error("Error during registration:", error.response);
         setErrorMessage(
-          error.response?.data?.detail || "Something went wrong. Please try again."
+          error.response?.data?.detail || "User with this email already exists."
         );
       } else {
         console.error("Unexpected error:", error);

@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
     try {
       const token = await login(username, password); // Call backend
       if (token) {
-        localStorage.setItem("authToken", token); // Save token for authenticated requests
+        localStorage.setItem("authToken", JSON.stringify({ token: "your_actual_token_here" }));
         navigate("/shop"); // Redirect on success
       }
     } catch (error: unknown) {

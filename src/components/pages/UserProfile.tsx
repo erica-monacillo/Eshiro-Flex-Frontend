@@ -15,12 +15,23 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-
+  
     if (!authToken) {
       navigate("/login"); // Redirect if no token
       return;
     }
-
+  
+    // Parse the token properly
+    let parsedToken;
+    try {
+      parsedToken = JSON.parse(authToken);
+      console.log("Parsed Token:", parsedToken); // Debugging
+    } catch (error) {
+      console.error("Error parsing authToken:", error);
+      navigate("/login");
+      return;
+    }
+  
     // Fetch user profile data
     const fetchUserProfile = async () => {
       try {
@@ -28,28 +39,30 @@ const UserProfile: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${parsedToken.token}`,
           },
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          setUserInfo({
-            name: data.name || "N/A",
-            address: data.address || "N/A",
-            email: data.email || "N/A",
-            phone: data.phone || "N/A",
-          });
-          setSelectedPayment(data.paymentMethod || null);
-        } else {
-          navigate("/login");
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+  
+        const data = await response.json(); // Convert response to JSON
+        console.log("User Profile Data:", data);
+  
+        setUserInfo({
+          name: data.name || "N/A",
+          address: data.address || "N/A",
+          email: data.email || "N/A",
+          phone: data.phone || "N/A",
+        });
+        setSelectedPayment(data.paymentMethod || null);
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
-        navigate("/login");
+        navigate("/login"); // Redirect if fetching fails
       }
     };
-
+  
     fetchUserProfile();
   }, [navigate]);
 
@@ -67,7 +80,7 @@ const UserProfile: React.FC = () => {
     }
 
     try {
-      const response = await fetch("/api/user/profile", {
+      const response = await fetch("/api/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

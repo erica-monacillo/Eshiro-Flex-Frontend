@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import { FiSearch, FiHeart, FiUser, FiBox, FiShoppingCart } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import SearchBar from "./Searchbar";
+
 
 const Navbar: React.FC = () => {
   const location = useLocation(); // Get the current route
@@ -13,6 +14,38 @@ const Navbar: React.FC = () => {
 
   const handleMouseEnter = () => setIsHeaderVisible(true);
   const handleMouseLeave = () => setIsHeaderVisible(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const storedToken = localStorage.getItem("authToken");
+      console.log("Stored Token:", storedToken); // Debugging line
+  
+      try {
+        const parsedToken = storedToken ? JSON.parse(storedToken) : null;
+        console.log("Parsed Token:", parsedToken); // Debugging line
+  
+        setIsAuthenticated(!!parsedToken?.token);
+      } catch (error) {
+        console.error("Error parsing authToken:", error);
+        setIsAuthenticated(false);
+      }
+    };
+  
+    checkAuth();
+  
+    window.addEventListener("storage", checkAuth);
+  
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+    };
+  }, [location]);
+  
+    // Log authentication state changes
+  useEffect(() => {
+    console.log("Auth state changed:", isAuthenticated); // Debugging: See if state updates
+  }, [isAuthenticated]);
+  
 
   return (
     <div
@@ -63,7 +96,7 @@ const Navbar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link to="/login" title="Log In">
+            <Link to={isAuthenticated ? "/profile" : "/login"} title="Profile">
               <FiUser size={20} color="white" />
             </Link>
           </li>
