@@ -20,6 +20,8 @@ const ProductPage: React.FC = () => {
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [cart, setCart] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addedStatus] = useState<Record<string, boolean>>({});; // Track each product's added status to cart
+
 
   // Fetch products from the backend API
   useEffect(() => {
@@ -123,19 +125,19 @@ const ProductPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Add to Cart Button */}
-            <button
-              className={`mt-4 w-full ${
-                cart.includes(product.id) || product.stock === 0
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-gray-300"
-              } text-sm py-2 rounded-full`}
-              onClick={() => handleAddToCart(product.id)}
-              disabled={cart.includes(product.id) || product.stock === 0}
-            >
-              <ShoppingCart size={16} className="mr-1 inline" />
-              {cart.includes(product.id) ? "Added" : "Add to Cart"}
-            </button>
+              {/* Add to Cart Button */}
+              <button
+                className={`mt-4 w-full ${
+                  addedStatus[product.name]
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-white text-black hover:bg-gray-300"
+                } text-sm py-2 rounded-full`}
+                onClick={() => handleAddToCart(product.id)}
+                disabled={addedStatus[product.name]}
+              >
+                <ShoppingCart size={16} className="mr-1 inline" />
+                {addedStatus[product.name] ? "Added" : "Add to Cart"}
+              </button>
           </div>
         ))}
       </div>
