@@ -27,7 +27,7 @@ export interface CartItem {
   id: number;
   productName: string;
   price: string;
-  imageSrc: string;
+  image_Url: string;
   quantity: number;
 }
 
@@ -74,7 +74,7 @@ const AestheticShop: React.FC = () => {
       id: product.id,
       productName: product.name,  // Corrected this line to map to 'productName'
       price: product.price,
-      imageSrc: product.image_url,
+      image_Url: product.image_url,
       quantity: 1,
     };
     setCartItems((prevItems) => {
