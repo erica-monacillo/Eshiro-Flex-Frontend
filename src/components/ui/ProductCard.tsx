@@ -11,13 +11,25 @@ interface CartItem {
   quantity: number;
 }
 
+interface Product {
+  id: number;
+  category: string;
+  name: string;
+  description: string;
+  price: string;
+  stock: number;
+  image_url: string;
+  product_size: string;
+  created_at: string;
+}
+
 interface ProductCardProps {
   id: number;
   imageSrc: string;
   productName: string;
   price: string;
-  onAddToCart: (item: CartItem) => void;
-  onAddToWishlist: (item: CartItem) => void; // Function for adding to wishlist
+  onAddToCart: (item: CartItem) => void;  // Now expecting CartItem type
+  onAddToWishlist: (item: Product) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -52,12 +64,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleAddToWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const item: CartItem = {
+    const item: Product = {
       id,
-      productName,
+      category: "Category", // You can replace this based on your use case
+      name: productName,
+      description: "Product Description", // You can replace this
       price,
-      imageSrc,
-      quantity: 1,
+      stock: 10, // Example value
+      image_url: imageSrc,
+      product_size: "M", // Example size
+      created_at: new Date().toISOString(), // Example value
     };
     onAddToWishlist(item); // Call parent function to add to wishlist
 
@@ -105,11 +121,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* Add to Cart Button */}
       <button
-        className={`mt-4 w-full ${
-          isAdded
-            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "bg-white text-black hover:bg-gray-300"
-        } text-sm py-2 rounded-full`}
+        className={`mt-4 w-full ${isAdded ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-white text-black hover:bg-gray-300"} text-sm py-2 rounded-full`}
         onClick={handleAddToCart}
         disabled={isAdded}
       >

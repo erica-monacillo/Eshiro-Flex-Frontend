@@ -16,13 +16,13 @@ import MotionControlPage from "../categories/MotionControl";
 import NaturalPage from "../categories/Natural";
 import NeutralPage from "../categories/Neutral";
 import CartPage from "./CartPage";
-import ProductPage from "./ProductPage";
 import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
 import Wishlist from "./Wishlist";
 import { fetchProducts } from "../../api/apiService"; // Import API call function
+import ProductPage from "../pages/ProductPage";
 
-
+// CartItem interface
 export interface CartItem {
   id: number;
   productName: string;
@@ -31,11 +31,17 @@ export interface CartItem {
   quantity: number;
 }
 
-export interface Product {
+// Product interface
+interface Product {
   id: number;
-  productName: string;
+  category: string;
+  name: string;
+  description: string;
   price: string;
-  imageSrc: string;
+  stock: number;
+  image_url: string;
+  product_size: string;
+  created_at: string;
 }
 
 const AestheticShop: React.FC = () => {
@@ -62,25 +68,34 @@ const AestheticShop: React.FC = () => {
     getProducts();
   }, []);
 
-  const handleAddToCart = (item: CartItem) => {
+  // Handle Add to Cart
+  const handleAddToCart = (product: Product) => {
+    const cartItem: CartItem = {
+      id: product.id,
+      productName: product.name,  // Corrected this line to map to 'productName'
+      price: product.price,
+      imageSrc: product.image_url,
+      quantity: 1,
+    };
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((cartItem) => cartItem.id === item.id);
+      const existingItem = prevItems.find((cartItem) => cartItem.id === product.id);
       if (existingItem) {
         return prevItems.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem.id === product.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        return [...prevItems, { ...item, quantity: 1 }];
+        return [...prevItems, cartItem];
       }
     });
   };
 
+  // Handle Add to Wishlist
   const handleAddToWishlist = (item: Product) => {
     setWishlistItems((prevItems) => {
       if (!prevItems.find((wishlistItem) => wishlistItem.id === item.id)) {
-        return [...prevItems, item]; 
+        return [...prevItems, item];
       }
       return prevItems;
     });
@@ -124,11 +139,11 @@ const AestheticShop: React.FC = () => {
                       <ProductCard
                         key={product.id}
                         id={product.id}
-                        imageSrc={product.imageSrc}
-                        productName={product.productName}
+                        imageSrc={product.image_url}
+                        productName={product.name}
                         price={product.price}
-                        onAddToCart={handleAddToCart}
-                        onAddToWishlist={handleAddToWishlist}
+                        onAddToCart={() => handleAddToCart(product)}
+                        onAddToWishlist={() => handleAddToWishlist(product)}
                       />
                     ))}
                   </div>

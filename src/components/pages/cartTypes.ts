@@ -5,5 +5,5 @@ export interface CartItem {
   price: number;
   imageSrc: string;
   size?: string;
-  quantity?: number; // Make 'quantity' optional
+  quantity: number;
 }
