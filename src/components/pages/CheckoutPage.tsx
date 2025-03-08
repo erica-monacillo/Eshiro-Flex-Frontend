@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 // Define types for order and items
@@ -17,97 +17,60 @@ interface Order {
 }
 
 const CheckoutPage: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null); // State for selected product
 
-  // Fetch order details when navigating to this page
   useEffect(() => {
     const fetchOrderDetails = async () => {
+      const token = localStorage.getItem("token");
       const orderId = location.state?.orderId;
-      if (!orderId) {
-        setError("Invalid order. Returning to cart.");
-        setTimeout(() => navigate("/cart"), 2000);
+
+      if (!token) {
+        setError("Unauthorized: Please log in.");
         setLoading(false);
+        setTimeout(() => navigate("/login"), 2000);
+        return;
+      }
+
+      if (!orderId) {
+        setError("No order found. Redirecting...");
+        setLoading(false);
+        setTimeout(() => navigate("/cart"), 2000);
         return;
       }
 
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError("Unauthorized: No token found.");
-          setLoading(false);
-          return;
-        }
-
         const response = await axios.get(
           `http://127.0.0.1:8000/api/orders/${orderId}/`,
           { headers: { Authorization: `Token ${token}` } }
         );
 
         setOrder(response.data);
-        // Set the first product as the default selected product
-        if (response.data.items.length > 0) {
-          setSelectedProduct(response.data.items[0].product_name);
-        }
+        setLoading(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          setError(error.response?.data?.detail || "Failed to load order.");
+          console.error("Fetch Order Error:", error.response?.data);
+          setError(error.response?.data?.detail || "Failed to load order details.");
         } else {
+          console.error("Unexpected Error:", error);
           setError("An unexpected error occurred.");
         }
-      } finally {
         setLoading(false);
       }
     };
 
     fetchOrderDetails();
-  }, [location.state, navigate]);
-
-  // Handle checkout process
-  const handleCheckout = async () => {
-    const cartId = localStorage.getItem("cartId");
-    const userId = localStorage.getItem("userId");
-
-    if (!cartId || !selectedProduct) {
-      alert("No cart or product selected. Please add items to the cart.");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Unauthorized: No token found.");
-        return;
-      }
-
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/orders/",
-        { cart_id: cartId, user: userId, product: selectedProduct },
-        { headers: { Authorization: `Token ${token}` } }
-      );
-
-      const { user_id, order_id } = response.data;
-      console.log("User ID:", user_id);
-      console.log("Order ID:", order_id);
-
-      alert("Order placed successfully!");
-      navigate("/checkout", { state: { orderId: response.data.id } });
-    } catch (error) {
-      console.error("Error during checkout:", error);
-      alert("Failed to place order. Please try again.");
-    }
-  };
+  }, [location.state?.orderId, navigate]);
 
   if (loading) return <p>Loading order details...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white p-6">
-      <h1 className="text-4xl font-bold text-indigo-400 mb-6">Checkout</h1>
+      <h1 className="text-4xl font-bold text-indigo-400 mb-6">Order Complete</h1>
       <div className="w-full max-w-4xl bg-gray-800 rounded-xl p-6 shadow-lg mb-6">
         <h2 className="text-2xl font-semibold text-indigo-300 mb-4">Order Summary</h2>
         {order && order.items.length > 0 ? (
@@ -115,10 +78,7 @@ const CheckoutPage: React.FC = () => {
             {order.items.map((item) => (
               <div
                 key={item.id}
-                className={`flex justify-between items-center bg-gray-700 p-4 rounded-lg ${
-                  selectedProduct === item.product_name ? "border border-indigo-500" : ""
-                }`}
-                onClick={() => setSelectedProduct(item.product_name)}
+                className="flex justify-between items-center bg-gray-700 p-4 rounded-lg"
               >
                 <div>
                   <p className="font-semibold text-indigo-200">{item.product_name}</p>
@@ -135,13 +95,13 @@ const CheckoutPage: React.FC = () => {
           <p className="text-lg font-semibold">Total:</p>
           <p className="text-lg font-bold text-indigo-400">₱{order?.total_price?.toFixed(2)}</p>
         </div>
-        <button
-          onClick={handleCheckout}
-          className="mt-6 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg shadow-md"
-        >
-          Place Order
-        </button>
       </div>
+      <button
+        onClick={() => navigate("/")}
+        className="mt-6 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg shadow-md"
+      >
+        Return to Home
+      </button>
     </div>
   );
 };

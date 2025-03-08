@@ -19,7 +19,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
     const fetchCart = async () => {
       try {
         const token = localStorage.getItem("token");
-
         if (!token) {
           setError("Unauthorized: No token found.");
           setLoading(false);
@@ -29,7 +28,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
         const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
           headers: { Authorization: `Token ${token}` },
         });
-
         console.log("Cart API Response:", response.data);
 
         const formattedCartItems = response.data.map((item: { 
@@ -37,13 +35,16 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
           product_name: string; 
           product_price: string; 
           product_image: string; 
+          size?: string;
           quantity: number; 
         }) => ({
           id: item.id,
           productName: item.product_name,  
-          price: parseFloat(item.product_price) || 0,  
+          price: item.product_price,  
           image_Url: item.product_image || "/fallback-image.png",
+          size: item.size,
           quantity: item.quantity,
+          isSelected: false,
         }));                
 
         setCartItems(formattedCartItems);
@@ -54,7 +55,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
         setLoading(false);
       }
     };
-
     fetchCart();
   }, [setCartItems]);
 
@@ -65,7 +65,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       setError("Unauthorized: No Token Found.");
       return;
     }
-
     try {
       const updatedQuantity = cartItems.find((item) => item.id === id)?.quantity || 1;
       const newQuantity = Math.max(1, updatedQuantity + (increment ? 1 : -1));
@@ -100,7 +99,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       setError("Unauthorized: No Token Found.");
       return;
     }
-
     try {
       await axios.delete(`http://127.0.0.1:8000/api/cart/${id}/`, {
         headers: { Authorization: `Token ${token}` },
@@ -113,43 +111,40 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
     }
   };
 
-  // Handle checkout
+  // Handle Checkout
   const handleCheckout = async () => {
-    if (selectedItems.length === 0) {
-      alert("No items selected for checkout.");
-      return;
-    }
-
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
+      const userId = localStorage.getItem("user_id"); // Retrieve user_id from localStorage
+  
+      if (!token || !userId) {
         alert("Unauthorized. Please log in.");
         return;
       }
-
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/orders/",
-        { cart_ids: selectedItems },
-        { headers: { Authorization: `Token ${token}` } } // ✅ Ensure token is sent
-      );
-
-      if (response.data && response.data.id) {
-        navigate("/checkout", { state: { orderId: response.data.id } });
-      } else {
-        alert("Failed to create order.");
-      }
+  
+      const payload = {
+        user_id: userId, // Correctly use the retrieved user ID
+        cart_items: selectedItems, // Ensure this variable is properly declared and populated
+      };
+  
+      const response = await axios.post("http://127.0.0.1:8000/api/orderItem/", payload, {
+        headers: { Authorization: `Token ${token}` },
+      });
+  
+      console.log("Order Created:", response.data);
+  
+      // Redirect to an order confirmation page
+      navigate("/order-confirmation"); // Update the route as needed
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Checkout Error:", error.response?.data);
-        setError(error.response?.data?.detail || "Failed to create order.");
+        console.error("Error:", error.response?.data || error.message);
       } else {
-        setError("An unexpected error occurred.");
+        console.error("Unexpected Error:", (error as Error).message);
       }
     }
-};
-
-
-
+  };
+  
+  
   // Calculate total price of selected items
   const total = selectedItems.reduce((acc, id) => {
     const item = cartItems.find((item) => item.id === id);

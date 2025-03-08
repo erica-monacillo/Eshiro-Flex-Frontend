@@ -84,38 +84,38 @@ const ProductPage: React.FC = () => {
     }
   };
 
-//  const handleWishlistPageRedirect = () => {
-//    navigate("/wishlist"); // Redirect to wishlist page
-//  };
-
   // Add product to cart
-  const handleAddToCart = (product: Product) => {
-    // Retrieve existing cart items from local storage
-    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const handleAddToCart = async (product: Product) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("You must be logged in to add items to the cart.");
+        return;
+      }
   
-    // Check if product already exists in the cart
-    const existingItem = storedCart.find((item: CartItem) => item.id === product.name);
+      const response = await axiosInstance.post(
+        "http://127.0.0.1:8000/api/cart/",
+        {
+          product_id: product.id,
+          quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
   
-    if (existingItem) {
-      // If the item is already in the cart, update its quantity
-      existingItem.quantity += 1;
-    } else {
-      // If the item is new, add it to the cart
-      const newItem: CartItem = {
-        id: product.name,
-        productName: product.name,
-        price: product.price,
-        imageSrc: product.image_url,
-        quantity: 1,
-      };
-      storedCart.push(newItem);
+      if (response.status === 201 || response.status === 200) {
+        toast.success(`${product.name} added to cart!`);
+      } else {
+        toast.error("Failed to add product to cart.");
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      toast.error("Error adding product to cart. Please try again.");
     }
-  
-    // Save the updated cart back to local storage
-    localStorage.setItem("cart", JSON.stringify(storedCart));
-  
-    // Show a success notification
-    toast.success(`${product.name} added to cart!`);
   };
 
   // Fallback for loading or no products
