@@ -1,109 +1,99 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 interface Product {
   id: number;
-  category: string;
   name: string;
-  description: string;
   price: string;
-  stock: number;
   image_url: string;
-  product_size: string;
-  created_at: string;
+  description: string;
 }
 
 interface WishlistItem {
   id: number;
-  user: number;
-  product: number;
   product_name: string;
   product_price: string;
-  added_at: string;
   product_image?: string;
+  store_name?: string;
 }
 
 interface WishlistProps {
-  wishlistItems: Product[];
-  setWishlistItems: React.Dispatch<React.SetStateAction<Product[]>>;
+  wishlistItems: WishlistItem[];
+  setWishlistItems: React.Dispatch<React.SetStateAction<WishlistItem[]>>;
 }
 
 const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) => {
+  const [, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ Fetch Wishlist from Backend API with Auth Token
+  // Fetch wishlist items
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         const token = localStorage.getItem("token");
-    
         if (!token) {
           setError("Unauthorized: No token found.");
           setLoading(false);
           return;
         }
-    
+
         const response = await axios.get<WishlistItem[]>("http://127.0.0.1:8000/api/wishlist/", {
           headers: { Authorization: `Token ${token}` },
         });
-    
-        console.log("Wishlist API Response:", response.data);
-    
-        // Convert backend data to match Product structure
-        const formattedWishlist: Product[] = response.data.map((item: WishlistItem) => ({
-          id: item.id,
-          name: item.product_name,
-          price: item.product_price,
-          image_url: item.product_image || "/fallback-image.png", // Ensure correct mapping
-          category: "Unknown",
-          description: "No description available",
-          stock: 0,
-          product_size: "N/A",
-          created_at: item.added_at,
-        }));
-    
-        setWishlistItems(formattedWishlist);
+
+        setWishlistItems(response.data);
         setLoading(false);
-      } catch (err) {
-        console.error("Error fetching wishlist:", err);
+      } catch {
         setError("Failed to load wishlist.");
         setLoading(false);
       }
     };
-    
+
     fetchWishlist();
   }, [setWishlistItems]);
 
-  // ✅ Remove Item from Wishlist with Authorization Token
-  const removeFromWishlist = async (id: number) => {
+  const handleProductClick = (item: WishlistItem) => {
+    setSelectedProduct({
+      id: item.id,
+      name: item.product_name,
+      price: item.product_price,
+      image_url: item.product_image || "/fallback-image.png",
+      description: "", // You can replace this with actual description
+    });
+  };
+
+  const addToCart = async (product: Product) => {
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
       if (!token) {
         setError("Unauthorized: No token found.");
         return;
       }
-  
-      // ✅ Use backticks for string interpolation
-      await axios.delete(`http://127.0.0.1:8000/api/wishlist/${id}/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
-  
-      // ✅ Update state properly (remove only the selected item)
-      setWishlistItems((prevWishlist) => prevWishlist.filter((item) => item.id !== id));
-  
-      console.log(`Item ${id} removed successfully.`);
-    } catch (err) {
-      console.error("Error removing item:", err);
-      setError("Failed to remove item from wishlist.");
+
+      await axios.post(
+        "http://127.0.0.1:8000/api/cart/add/",
+        { product: product.id },
+        { headers: { Authorization: `Token ${token}` } }
+      );
+
+      setSelectedProduct(null); // Close the product details modal after adding to cart
+    } catch {
+      setError("Failed to add item to cart.");
     }
   };
-  
+
+  const removeFromWishlist = (id: number) => {
+    const updatedWishlist = wishlistItems.filter((item) => item.id !== id);
+    setWishlistItems(updatedWishlist);
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // Update Local Storage
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex justify-center items-center p-8">
       <div className="w-full max-w-4xl bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 shadow-lg rounded-lg p-6">
         <h2 className="text-3xl font-semibold text-center text-gray-100 mb-6">Your Wishlist</h2>
-
+  
         {loading ? (
           <p className="text-center text-gray-300">Loading wishlist...</p>
         ) : error ? (
@@ -111,26 +101,39 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
         ) : (
           <>
             {wishlistItems.length > 0 ? (
-              <div className="wishlist-items space-y-4">
+              <div className="wishlist-items grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {wishlistItems.map((item) => (
-                  <div key={item.id} className="flex justify-between items-center border-b pb-4">
-                    <div className="flex items-center space-x-4">
-                    <img 
-                      src={item.image_url || "/fallback-image.png"} 
-                      alt={item.name} 
-                      className="w-16 h-16 object-cover rounded-md" 
-                      onError={(e) => (e.currentTarget.src = "/fallback-image.png")} 
-                    />
-                      <div className="text-gray-300">
-                        <h3 className="text-lg font-medium">{item.name}</h3>
-                        <p className="text-sm">{item.price}</p>
-                      </div>
-                    </div>
-                    <button
-                      className="text-red-500 hover:text-red-700 font-semibold"
+                  <div key={item.id} className="bg-gray-800 rounded-lg p-4 shadow-lg relative">
+                    <button 
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1" 
                       onClick={() => removeFromWishlist(item.id)}
                     >
-                      Remove
+                      X
+                    </button>
+                    <img
+                      src={item.product_image || "/fallback-image.png"}
+                      alt={item.product_name}
+                      className="w-full h-40 object-cover rounded-md cursor-pointer"
+                      onClick={() => handleProductClick(item)}
+                    />
+                    <div className="text-gray-300 mt-4 text-center">
+                      <h3 className="text-lg font-medium">{item.product_name}</h3>
+                      <p className="text-sm font-semibold text-gray-400">{item.store_name}</p>
+                      <p className="text-lg font-bold text-white">{item.product_price}</p>
+                    </div>
+                    <button 
+                      className="w-full mt-4 bg-white text-black font-semibold py-2 rounded-lg flex items-center justify-center gap-2"
+                      onClick={() => 
+                        addToCart({
+                          id: item.id,
+                          name: item.product_name, // Map product_name to name
+                          price: item.product_price, // Map product_price to price
+                          image_url: item.product_image || "/fallback-image.png", // Ensure an image URL is provided
+                          description: "" // Provide an empty description if it's missing
+                        })
+                      }
+                    >
+                      🛒 Add to Cart
                     </button>
                   </div>
                 ))}
@@ -144,5 +147,4 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
     </div>
   );
 };
-
 export default Wishlist;

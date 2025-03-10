@@ -125,16 +125,20 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
         return;
       }
   
-      // Proceed with order creation
+      // Send the total price along with the order data
       const orderResponse = await axios.post(
         "http://127.0.0.1:8000/api/orders/",
-        { user_id: userId },
+        {
+          user_id: userId,
+          total_price: total,  // Send the calculated total price
+        },
         { headers: { Authorization: `Token ${token}` } }
       );
   
       const orderId = orderResponse.data.id;
       console.log("Order Created:", orderId);
   
+      // Add selected items to the order
       await Promise.all(
         selectedItems.map(async (cartItemId) => {
           const item = cartItems.find((item) => item.id === cartItemId); // Find item by cart ID
@@ -153,6 +157,13 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       );
   
       console.log("All selected items added to order.");
+  
+      // Remove selected items from the cart
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => !selectedItems.includes(item.id))
+      );
+  
+      // Navigate to checkout page with orderId
       navigate("/checkout", { state: { orderId } });
     } catch (error) {
       console.error("Checkout error:", error);
