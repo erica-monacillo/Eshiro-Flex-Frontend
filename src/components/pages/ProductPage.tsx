@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import axiosInstance from "@/api/axiosInstance"; // Import the axios instance
 import { toast } from "react-toastify";
+import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 
 
@@ -61,26 +62,52 @@ const ProductPage: React.FC = () => {
   }, []);
 
   // Add product to wishlist
-  const handleAddToWishlist = (product: Product) => {
+  const handleAddToWishlist = async (product: Product) => {
     if (!wishlistStatus[product.name]) {
-      const item: CartItem = {
-        id: product.name,
-        productName: product.name,
-        price: product.price,
-        imageSrc: product.image_url,
-        quantity: 1,
-      };
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          toast.error('Please log in to add items to your wishlist.');
+          return;
+        }
   
-      const updatedWishlist = [...wishlistItems, item]; // Update wishlist state
-      setWishlistItems(updatedWishlist);
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // ✅ Save to localStorage
+        const response = await axios.post(
+          'http://127.0.0.1:8000/api/wishlist/',
+          { product: product.id },
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
   
-      setWishlistStatus((prevStatus) => ({
-        ...prevStatus,
-        [product.name]: true,
-      }));
+        // Optional: Log response for debugging or handle it if needed
+        console.log(response.data);
   
-      toast.success(`${product.name} added to wishlist!`);
+        const item: CartItem = {
+          id: product.id.toString(),  // Convert product.id to string
+          productName: product.name,
+          price: product.price.toString(),  // Convert price to string
+          imageSrc: product.image_url,
+          quantity: 1,
+        };
+  
+        const updatedWishlist = [...wishlistItems, item];
+        setWishlistItems(updatedWishlist);
+        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+  
+        setWishlistStatus((prevStatus) => ({
+          ...prevStatus,
+          [product.name]: true,
+        }));
+  
+        toast.success(`${product.name} added to wishlist!`);
+      } catch (error) {
+        console.error('Error adding to wishlist:', error);
+        toast.error('Failed to add product to wishlist.');
+      }
+    } else {
+      toast.info(`${product.name} is already in your wishlist!`);
     }
   };
 

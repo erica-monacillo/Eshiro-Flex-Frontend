@@ -35,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
         type="text"
         placeholder="Search for products..."
         aria-label="Search input"
-        className="w-full px-2 text-xs rounded-full outline-none"
+        className="w-full px-2 text-xs text-black rounded-full outline-none"
       />
       <button 
         className="p-2"

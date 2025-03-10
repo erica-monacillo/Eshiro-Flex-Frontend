@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"; // Use `useNavigate` in React Router v6
+import axios from "axios"; // Import axios for making API calls
 
 interface CartItem {
   id: number;
@@ -28,7 +29,7 @@ interface ProductCardProps {
   imageSrc: string;
   productName: string;
   price: string;
-  onAddToCart: (item: CartItem) => void;  // Now expecting CartItem type
+  onAddToCart: (item: CartItem) => void;
   onAddToWishlist: (item: Product) => void;
 }
 
@@ -37,32 +38,39 @@ const ProductCard: React.FC<ProductCardProps> = ({
   imageSrc,
   productName,
   price,
-  onAddToCart,
   onAddToWishlist,
 }) => {
-  const [isAdded, setIsAdded] = useState(false);
+  const [isAdded] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false); // Track if item is wishlisted
   const navigate = useNavigate(); // Use `useNavigate` in React Router v6
 
-  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>, item: CartItem) => {
     e.stopPropagation();
-    if (!isAdded) {
-      const item: CartItem = {
-        id,
-        productName,
-        price,
-        imageSrc,
-        quantity: 1,
-      };
-      onAddToCart(item);
-      setIsAdded(true);
-
-      // Trigger notification
-      toast.success(`${productName} added to cart!`);
+  
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Unauthorized: No token found.");
+        return;
+      }
+  
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/cart/",
+        { product: item.id, quantity: 1 },
+        { headers: { Authorization: `Token ${token}` } }
+      );
+  
+      console.log("API Response:", response);  // Log the full response
+      toast.success(`${item.productName} added to cart!`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);  // Log error to console
+      toast.error("Failed to add item to cart.");
     }
   };
+  
+  
 
-  const handleAddToWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToWishlist = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     const item: Product = {
       id,
@@ -75,10 +83,28 @@ const ProductCard: React.FC<ProductCardProps> = ({
       product_size: "M", // Example size
       created_at: new Date().toISOString(), // Example value
     };
-    onAddToWishlist(item); // Call parent function to add to wishlist
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("You need to be logged in to add items to the wishlist.");
+        return;
+      }
 
-    setIsWishlisted(true);
-    toast.success(`${productName} added to wishlist!`);
+      // Make POST request to add item to wishlist
+      await axios.post(
+        "http://127.0.0.1:8000/api/wishlist/",
+        { product: id },
+        { headers: { Authorization: `Token ${token}` } }
+      );
+      onAddToWishlist(item);
+      setIsWishlisted(true);
+
+      // Trigger notification
+      toast.success(`${productName} added to wishlist!`);
+    } catch (error) {
+      console.error(error); // Log the error to the console
+      toast.error("Failed to add item to cart.");
+    }    
   };
 
   const handleWishlistPageRedirect = () => {
@@ -122,8 +148,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Add to Cart Button */}
       <button
         className={`mt-4 w-full ${isAdded ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-white text-black hover:bg-gray-300"} text-sm py-2 rounded-full`}
-        onClick={handleAddToCart}
-        disabled={isAdded}
+        onClick={(e) => handleAddToCart(e, { id, productName, price, imageSrc, quantity: 1 })} // Pass the correct item
+        disabled={isAdded} // Disable button if already added
       >
         <ShoppingCart size={16} className="mr-1 inline" />
         {isAdded ? "Added" : "Add to Cart"}
