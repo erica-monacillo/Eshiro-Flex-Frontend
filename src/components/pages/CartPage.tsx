@@ -84,13 +84,14 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       console.error("Error updating quantity:", error);
     }
   };
-
+  
   // Handle selection
   const handleSelectItem = (id: number) => {
     setSelectedItems(prev =>
-      prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
+        prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
     );
-  };
+};
+
 
   // Handle remove from cart
   const handleRemove = async (id: number) => {
@@ -114,37 +115,51 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   // Handle Checkout
   const handleCheckout = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("user_id"); // Retrieve user_id from localStorage
-  
-      if (!token || !userId) {
-        alert("Unauthorized. Please log in.");
-        return;
-      }
-  
-      const payload = {
-        user_id: userId, // Correctly use the retrieved user ID
-        cart_items: selectedItems, // Ensure this variable is properly declared and populated
-      };
-  
-      const response = await axios.post("http://127.0.0.1:8000/api/orderItem/", payload, {
-        headers: { Authorization: `Token ${token}` },
-      });
-  
-      console.log("Order Created:", response.data);
-  
-      // Redirect to an order confirmation page
-      navigate("/order-confirmation"); // Update the route as needed
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("user_id");
+        const cartId = localStorage.getItem("cart_id");
+
+        if (!token || !userId || !cartId) {
+            alert("Missing authentication or cart details.");
+            return;
+        }
+
+        // Step 1: Create an order
+        const orderResponse = await axios.post(
+            "http://127.0.0.1:8000/api/orders/",
+            { user_id: userId, cart_id: cartId },
+            { headers: { Authorization: `Token ${token}` } }
+        );
+
+        console.log("Order Created:", orderResponse.data);
+        const orderId = orderResponse.data.id;
+
+        // Step 2: Add selected items to the order
+        await Promise.all(
+            selectedItems.map(async (productId) => {
+                await axios.post(
+                    "http://127.0.0.1:8000/api/order-items/create/",
+                    {
+                        order_id: orderId,
+                        product_id: productId,
+                        quantity: 1, 
+                    },
+                    { headers: { Authorization: `Token ${token}` } }
+                );
+            })
+        );
+
+        console.log("All selected items added to order.");
+
+        // Step 3: Navigate to checkout with orderId
+        navigate("/checkout", { state: { orderId } });
+
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Error:", error.response?.data || error.message);
-      } else {
-        console.error("Unexpected Error:", (error as Error).message);
-      }
+        console.error("Checkout error:", error);
     }
-  };
-  
-  
+};
+
+
   // Calculate total price of selected items
   const total = selectedItems.reduce((acc, id) => {
     const item = cartItems.find((item) => item.id === id);
@@ -239,9 +254,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       )}
     </div>
   );
-  
-  
-   
 };
 
 export default CartPage;

@@ -26,15 +26,21 @@ const LoginPage: React.FC = () => {
     }
   
     try {
-      const token = await login(username, password); // Call backend
-      if (token) {
-        localStorage.setItem("authToken", JSON.stringify({ token: "your_actual_token_here" }));
+      const response = await login(username, password); // Ensure this returns { token: "xyz" }
+  
+      if (response && response.token) {
+        // ✅ Store the actual token from backend
+        localStorage.setItem("authToken", JSON.stringify({ token: response.token }));
+  
         navigate("/shop"); // Redirect on success
+      } else {
+        setError("Invalid login response. Please try again.");
       }
     } catch (error: unknown) {
-      setError((error as Error).message); // Show error to the user
+      setError((error as Error).message);
     }
   };
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">
            {/* Logo Section (Hidden on Small Screens) */}
