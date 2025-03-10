@@ -4,48 +4,56 @@ import { FiSearch, FiHeart, FiUser, FiBox, FiShoppingCart } from "react-icons/fi
 import { Link, useLocation } from "react-router-dom";
 import SearchBar from "./Searchbar";
 
-
 const Navbar: React.FC = () => {
   const location = useLocation(); // Get the current route
   const isCategoryPage = location.pathname.startsWith("/category"); // Check if on a category page
 
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Helper functions to show/hide header
   const handleMouseEnter = () => setIsHeaderVisible(true);
   const handleMouseLeave = () => setIsHeaderVisible(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = () => {
       const storedToken = localStorage.getItem("authToken");
       console.log("Stored Token:", storedToken); // Debugging line
-  
+
       try {
-        const parsedToken = storedToken ? JSON.parse(storedToken) : null;
+        let parsedToken = null;
+
+        // Handle cases where authToken is stored either as JSON or a plain string
+        if (storedToken) {
+          parsedToken =
+            storedToken.startsWith("{")
+              ? JSON.parse(storedToken) // Parse if it's JSON
+              : { token: storedToken }; // Treat as plain token if not JSON
+        }
+
         console.log("Parsed Token:", parsedToken); // Debugging line
-  
-        setIsAuthenticated(!!parsedToken?.token);
+        setIsAuthenticated(!!parsedToken?.token); // Set authentication state based on presence of a token
       } catch (error) {
         console.error("Error parsing authToken:", error);
         setIsAuthenticated(false);
       }
     };
-  
+
     checkAuth();
-  
+
+    // Listen for changes to localStorage in other tabs/windows
     window.addEventListener("storage", checkAuth);
-  
+
     return () => {
       window.removeEventListener("storage", checkAuth);
     };
   }, [location]);
-  
-    // Log authentication state changes
+
+  // Log authentication state changes
   useEffect(() => {
     console.log("Auth state changed:", isAuthenticated); // Debugging: See if state updates
   }, [isAuthenticated]);
-  
 
   return (
     <div
@@ -53,6 +61,7 @@ const Navbar: React.FC = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Header */}
       <Header isVisible={isHeaderVisible} />
       <nav
         className={`${
@@ -75,26 +84,31 @@ const Navbar: React.FC = () => {
 
         {/* Right Section (Icons) */}
         <ul className="flex space-x-6 mr-4 md:mr-20">
+          {/* Search Button */}
           <li>
             <button onClick={() => setIsSearchVisible(true)} aria-label="Open Search Bar">
               <FiSearch size={20} color="white" />
             </button>
           </li>
+          {/* Products Link */}
           <li>
             <Link to="/product" title="Products">
               <FiBox size={20} color="white" />
             </Link>
           </li>
+          {/* Wishlist Link */}
           <li>
             <Link to="/wishlist" title="Wishlist">
               <FiHeart size={20} color="white" />
             </Link>
           </li>
+          {/* Cart Link */}
           <li>
             <Link to="/cart" title="Cart">
               <FiShoppingCart size={20} color="white" />
             </Link>
           </li>
+          {/* Profile/Login Link */}
           <li>
             <Link to={isAuthenticated ? "/profile" : "/login"} title="Profile">
               <FiUser size={20} color="white" />
