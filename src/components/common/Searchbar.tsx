@@ -9,28 +9,58 @@ interface Product {
 interface SearchBarProps {
   isVisible: boolean;
   onClose: () => void;
-  products?: Product[];
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose, products = [] }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
   const searchRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-      onClose();
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/products/');
+        if (!response.ok) throw new Error("Failed to fetch products");
+        const data = await response.json();
+        setProducts(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isVisible) {
+      fetchProducts();
     }
-  }, [onClose]);
+  }, [isVisible]);
+
+  // Handle click outside
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
 
   useEffect(() => {
     if (isVisible) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [isVisible, handleClickOutside]);
 
-  // 🔥 FIX: Move filtering logic inside onChange
+  // Handle search filtering
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
@@ -39,7 +69,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose, products = []
       setFilteredProducts([]);
     } else {
       setFilteredProducts(
-        products.filter(product =>
+        products.filter((product) =>
           product.name.toLowerCase().includes(value.toLowerCase())
         )
       );
@@ -60,13 +90,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose, products = []
           placeholder="Search for products..."
           aria-label="Search input"
           value={query}
-          onChange={handleSearchChange} // 🔥 FIX: Filtering inside onChange
+          onChange={handleSearchChange}
           className="w-full px-2 py-1 text-sm text-black placeholder-gray-500 bg-white rounded-lg outline-none border border-gray-300"
         />
         <button className="p-2" aria-label="Search button">
           <FiSearch size={18} className="text-gray-600" strokeWidth={3.5} />
         </button>
       </div>
+
+      {/* Loading State */}
+      {loading && <p className="text-gray-600 text-sm mt-2">Loading...</p>}
+
+      {/* Error State */}
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       {/* Search Results */}
       {filteredProducts.length > 0 && (
