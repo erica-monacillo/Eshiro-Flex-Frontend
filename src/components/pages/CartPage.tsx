@@ -87,10 +87,11 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   
   // Handle selection
   const handleSelectItem = (id: number) => {
-    setSelectedItems(prev =>
-        prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
-};
+  };
+  
 
 
   // Handle remove from cart
@@ -117,48 +118,47 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
     try {
         const token = localStorage.getItem("token");
         const userId = localStorage.getItem("user_id");
-        const cartId = localStorage.getItem("cart_id");
 
-        if (!token || !userId || !cartId) {
-            alert("Missing authentication or cart details.");
+        if (!token || !userId) {
+            console.error("Token or User ID missing:", { token, userId });
+            alert("Missing authentication details.");
             return;
         }
 
-        // Step 1: Create an order
+        // Proceed with order creation
         const orderResponse = await axios.post(
             "http://127.0.0.1:8000/api/orders/",
-            { user_id: userId, cart_id: cartId },
+            { user_id: userId },
             { headers: { Authorization: `Token ${token}` } }
         );
 
-        console.log("Order Created:", orderResponse.data);
         const orderId = orderResponse.data.id;
+        console.log("Order Created:", orderId);
 
-        // Step 2: Add selected items to the order
         await Promise.all(
             selectedItems.map(async (productId) => {
-                await axios.post(
-                    "http://127.0.0.1:8000/api/order-items/create/",
-                    {
-                        order_id: orderId,
-                        product_id: productId,
-                        quantity: 1, 
-                    },
-                    { headers: { Authorization: `Token ${token}` } }
-                );
+                const item = cartItems.find((item) => item.id === productId);
+                if (item) {
+                    await axios.post(
+                        "http://127.0.0.1:8000/api/order-items/create/",
+                        {
+                            order_id: orderId,
+                            product_id: productId,
+                            quantity: item.quantity,
+                        },
+                        { headers: { Authorization: `Token ${token}` } }
+                    );
+                }
             })
         );
 
         console.log("All selected items added to order.");
-
-        // Step 3: Navigate to checkout with orderId
         navigate("/checkout", { state: { orderId } });
 
     } catch (error) {
         console.error("Checkout error:", error);
     }
 };
-
 
   // Calculate total price of selected items
   const total = selectedItems.reduce((acc, id) => {
