@@ -11,11 +11,13 @@ const LoginPage: React.FC = () => {
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-    if (authToken) {
+    const userId = localStorage.getItem("user_id");
+  
+    if (authToken && userId) {
       navigate("/profile");
     }
   }, [navigate]);
-
+  
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -26,11 +28,12 @@ const LoginPage: React.FC = () => {
     }
   
     try {
-      const response = await login(username, password); // Ensure this returns { token: "xyz" }
+      const response = await login(username, password); // Ensure it includes { token, user_id }
   
-      if (response && response.token) {
-        // ✅ Store the actual token from backend
-        localStorage.setItem("authToken", JSON.stringify({ token: response.token }));
+      if (response && response.token && response.user_id) {
+        // ✅ Store both token and user_id in localStorage
+        localStorage.setItem("authToken", response.token);
+        localStorage.setItem("user_id", response.user_id.toString()); // Store user_id
   
         navigate("/shop"); // Redirect on success
       } else {
@@ -40,6 +43,7 @@ const LoginPage: React.FC = () => {
       setError((error as Error).message);
     }
   };
+  
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">

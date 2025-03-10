@@ -35,6 +35,7 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
           product_name: string; 
           product_price: string; 
           product_image: string; 
+          product_id: number; // Ensure this field is included
           size?: string;
           quantity: number; 
         }) => ({
@@ -45,7 +46,8 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
           size: item.size,
           quantity: item.quantity,
           isSelected: false,
-        }));                
+          product_id: item.product_id, 
+        }));
 
         setCartItems(formattedCartItems);
       } catch (error) {
@@ -92,8 +94,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
     );
   };
   
-
-
   // Handle remove from cart
   const handleRemove = async (id: number) => {
     const token = localStorage.getItem("token");
@@ -116,56 +116,55 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   // Handle Checkout
   const handleCheckout = async () => {
     try {
-        const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("user_id");
-
-        if (!token || !userId) {
-            console.error("Token or User ID missing:", { token, userId });
-            alert("Missing authentication details.");
-            return;
-        }
-
-        // Proceed with order creation
-        const orderResponse = await axios.post(
-            "http://127.0.0.1:8000/api/orders/",
-            { user_id: userId },
-            { headers: { Authorization: `Token ${token}` } }
-        );
-
-        const orderId = orderResponse.data.id;
-        console.log("Order Created:", orderId);
-
-        await Promise.all(
-            selectedItems.map(async (productId) => {
-                const item = cartItems.find((item) => item.id === productId);
-                if (item) {
-                    await axios.post(
-                        "http://127.0.0.1:8000/api/order-items/create/",
-                        {
-                            order_id: orderId,
-                            product_id: productId,
-                            quantity: item.quantity,
-                        },
-                        { headers: { Authorization: `Token ${token}` } }
-                    );
-                }
-            })
-        );
-
-        console.log("All selected items added to order.");
-        navigate("/checkout", { state: { orderId } });
-
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("user_id");
+  
+      if (!token || !userId) {
+        console.error("Token or User ID missing:", { token, userId });
+        alert("Missing authentication details.");
+        return;
+      }
+  
+      // Proceed with order creation
+      const orderResponse = await axios.post(
+        "http://127.0.0.1:8000/api/orders/",
+        { user_id: userId },
+        { headers: { Authorization: `Token ${token}` } }
+      );
+  
+      const orderId = orderResponse.data.id;
+      console.log("Order Created:", orderId);
+  
+      await Promise.all(
+        selectedItems.map(async (cartItemId) => {
+          const item = cartItems.find((item) => item.id === cartItemId); // Find item by cart ID
+          if (item) {
+            await axios.post(
+              "http://127.0.0.1:8000/api/api/order-items/create/",
+              {
+                order_id: orderId,
+                product_id: item.product_id, // Use the correct product_id
+                quantity: item.quantity,
+              },
+              { headers: { Authorization: `Token ${token}` } }
+            );
+          }
+        })
+      );
+  
+      console.log("All selected items added to order.");
+      navigate("/checkout", { state: { orderId } });
     } catch (error) {
-        console.error("Checkout error:", error);
+      console.error("Checkout error:", error);
     }
-};
+  };
+  
 
-  // Calculate total price of selected items
-  const total = selectedItems.reduce((acc, id) => {
+  const total: number = selectedItems.reduce((acc, id) => {
     const item = cartItems.find((item) => item.id === id);
-    return item ? acc + (parseFloat(item.price) * item.quantity) : acc;
+    return item ? acc + parseFloat(item.price) * item.quantity : acc;
   }, 0);
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex flex-col items-center text-white px-6">
       <h1 className="text-4xl font-bold mt-16 mb-10 text-gray-200">🛒 Your Shopping Cart</h1>
