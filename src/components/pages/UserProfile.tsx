@@ -21,10 +21,14 @@ const UserProfile: React.FC = () => {
       return;
     }
   
-    // Parse the token properly
     let parsedToken;
     try {
+      // If the token is a JSON object, parse it
       parsedToken = JSON.parse(authToken);
+      if (typeof parsedToken === "string") {
+        // If it's a plain string, use it directly
+        parsedToken = { token: parsedToken };
+      }
       console.log("Parsed Token:", parsedToken); // Debugging
     } catch (error) {
       console.error("Error parsing authToken:", error);
@@ -47,7 +51,7 @@ const UserProfile: React.FC = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
   
-        const data = await response.json(); // Convert response to JSON
+        const data = await response.json();
         console.log("User Profile Data:", data);
   
         setUserInfo({
@@ -59,12 +63,12 @@ const UserProfile: React.FC = () => {
         setSelectedPayment(data.paymentMethod || null);
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
-        navigate("/login"); // Redirect if fetching fails
+        navigate("/login");
       }
     };
   
     fetchUserProfile();
-  }, [navigate]);
+  }, [navigate]);  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
