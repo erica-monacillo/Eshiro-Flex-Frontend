@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
   const location = useLocation(); // Get the current route
   const isCategoryPage = location.pathname.startsWith("/category"); // Check if on a category page
 
-  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const [isHeaderVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 

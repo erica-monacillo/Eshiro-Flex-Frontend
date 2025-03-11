@@ -40,8 +40,10 @@ const LoginPage: React.FC = () => {
         setError("Invalid login response. Please try again.");
       }
     } catch (error: unknown) {
+      console.error("Login error:", error); // Log the error
       setError("Login failed. Please check your credentials and try again.");
     }
+    
   };
 
   return (
