@@ -11,10 +11,6 @@ import Footer from "../common/Footer";
 import LoginPage from "./LoginPage";
 import SignUpPage from "./SignUpPage";
 import CategoryPage from "../ui/CategoryPage";
-import StabilityPage from "../categories/Stability";
-import MotionControlPage from "../categories/MotionControl";
-import NaturalPage from "../categories/Natural";
-import NeutralPage from "../categories/Neutral";
 import CartPage from "./CartPage";
 import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
@@ -127,7 +123,6 @@ const AestheticShop: React.FC = () => {
             element={
               <>
                 <HeroSection />
-                <Categories />
                 <WhatsNew />
                 {loading ? (
                   <p className="text-center text-gray-300">Loading products...</p>
@@ -153,11 +148,6 @@ const AestheticShop: React.FC = () => {
           />
           {/* Other Routes */}
           <Route path="/shop" element={<AestheticShop />} />
-          <Route path="/category/stability" element={<StabilityPage />} />
-          <Route path="/category/neutral" element={<NeutralPage />} />
-          <Route path="/category/natural" element={<NaturalPage />} />
-          <Route path="/category/motioncontrol" element={<MotionControlPage />} />
-          <Route path="/category/:categoryName" element={<CategoryPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route
             path="/wishlist"

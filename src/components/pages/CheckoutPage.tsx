@@ -72,7 +72,7 @@ const CheckoutPage: React.FC = () => {
       try {
         // Fetch User Data
         const userResponse = await axios.get(
-          `http://127.0.0.1:8000/api/users/${userId}/`,
+          `http://127.0.0.1:8000/api/profile/`,
           { headers: { Authorization: `Token ${token}` } }
         );
         setUser(userResponse.data);

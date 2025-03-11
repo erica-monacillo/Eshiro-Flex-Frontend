@@ -19,13 +19,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch products from API
+  // Fetch products when the search bar is first opened
   useEffect(() => {
     const fetchProducts = async () => {
+      if (products.length > 0) return; // Avoid unnecessary API calls
+
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/products/');
+        const response = await fetch("http://127.0.0.1:8000/api/products/");
         if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
         setProducts(data);
@@ -36,12 +38,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
       }
     };
 
-    if (isVisible) {
-      fetchProducts();
-    }
-  }, [isVisible]);
+    if (isVisible) fetchProducts();
+  }, [isVisible, products]);
 
-  // Handle click outside
+  // Handle click outside to close search bar
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -54,6 +54,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
   useEffect(() => {
     if (isVisible) {
       document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -62,10 +64,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
 
   // Handle search filtering
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.trim();
     setQuery(value);
 
-    if (value.trim() === "") {
+    if (value === "") {
       setFilteredProducts([]);
     } else {
       setFilteredProducts(
@@ -82,35 +84,33 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
     <div
       ref={searchRef}
       className="fixed top-3 left-1/2 transform -translate-x-1/2 w-2/3 sm:w-1/3 
-                 bg-white shadow-lg rounded-lg flex flex-col px-3 py-2 border border-gray-300 z-50"
+                 bg-white/5 backdrop-blur-xl shadow-2xl rounded-full flex flex-col px-3 py-2 
+                 border border-white/20 z-50 overflow-hidden"
     >
-      <div className="flex items-center w-full">
+      <div className="flex items-center w-full relative">
+        <FiSearch size={18} className="text-white/80 absolute left-3" strokeWidth={3.5} />
         <input
           type="text"
-          placeholder="Search for products..."
+          placeholder="Search..."
           aria-label="Search input"
           value={query}
           onChange={handleSearchChange}
-          className="w-full px-2 py-1 text-sm text-black placeholder-gray-500 bg-white rounded-lg outline-none border border-gray-300"
+          className="w-full pl-10 pr-3 py-2 text-sm text-white placeholder-white/60 bg-transparent 
+                     rounded-full outline-none border-none focus:ring-2 focus:ring-white/40"
+          aria-live="polite"
         />
-        <button className="p-2" aria-label="Search button">
-          <FiSearch size={18} className="text-gray-600" strokeWidth={3.5} />
-        </button>
       </div>
-
-      {/* Loading State */}
-      {loading && <p className="text-gray-600 text-sm mt-2">Loading...</p>}
-
-      {/* Error State */}
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       {/* Search Results */}
       {filteredProducts.length > 0 && (
-        <ul className="w-full mt-2 bg-white shadow-lg border border-gray-300 rounded-lg max-h-48 overflow-auto">
+        <ul
+          className="w-full mt-2 bg-white/5 backdrop-blur-xl shadow-lg border border-white/10 
+                     rounded-2xl max-h-48 overflow-auto transition-all duration-200 ease-in-out"
+        >
           {filteredProducts.map((product) => (
             <li
               key={product.id}
-              className="p-2 text-sm text-black hover:bg-gray-100 cursor-pointer transition-colors duration-150"
+              className="p-2 text-white hover:bg-white/20 cursor-pointer transition-colors duration-150"
               onClick={() => alert(`Selected: ${product.name}`)}
             >
               {product.name}
@@ -118,6 +118,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
           ))}
         </ul>
       )}
+
+      {/* Error message */}
+      {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
     </div>
   );
 };

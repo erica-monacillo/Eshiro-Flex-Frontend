@@ -193,7 +193,7 @@ const ProductPage: React.FC = () => {
               </p>
               <p className="text-sm text-gray-400">{product.description}</p>
               <p className="text-lg font-bold text-white mt-2">
-                ₱{product.price}
+                ₱ {product.price}
               </p>
               <p
                 className={`text-sm mt-1 ${

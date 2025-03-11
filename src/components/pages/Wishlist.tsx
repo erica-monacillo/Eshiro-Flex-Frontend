@@ -27,7 +27,6 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch wishlist items
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
@@ -59,41 +58,31 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
       name: item.product_name,
       price: item.product_price,
       image_url: item.product_image || "/fallback-image.png",
-      description: "", // You can replace this with actual description
+      description: "",
     });
   };
 
-  const addToCart = async (product: Product) => {
+  const removeFromWishlist = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         setError("Unauthorized: No token found.");
         return;
       }
-
-      await axios.post(
-        "http://127.0.0.1:8000/api/cart/add/",
-        { product: product.id },
-        { headers: { Authorization: `Token ${token}` } }
-      );
-
-      setSelectedProduct(null); // Close the product details modal after adding to cart
+      await axios.delete(`http://127.0.0.1:8000/api/wishlist/${id}/`, {
+        headers: { Authorization: `Token ${token}` },
+      });
+      const updatedWishlist = wishlistItems.filter((item) => item.id !== id);
+      setWishlistItems(updatedWishlist);
     } catch {
-      setError("Failed to add item to cart.");
+      setError("Failed to remove item from wishlist.");
     }
-  };
-
-  const removeFromWishlist = (id: number) => {
-    const updatedWishlist = wishlistItems.filter((item) => item.id !== id);
-    setWishlistItems(updatedWishlist);
-    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); // Update Local Storage
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex justify-center items-center p-8">
       <div className="w-full max-w-4xl bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 shadow-lg rounded-lg p-6">
         <h2 className="text-3xl font-semibold text-center text-gray-100 mb-6">Your Wishlist</h2>
-  
         {loading ? (
           <p className="text-center text-gray-300">Loading wishlist...</p>
         ) : error ? (
@@ -121,20 +110,6 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
                       <p className="text-sm font-semibold text-gray-400">{item.store_name}</p>
                       <p className="text-lg font-bold text-white">{item.product_price}</p>
                     </div>
-                    <button 
-                      className="w-full mt-4 bg-white text-black font-semibold py-2 rounded-lg flex items-center justify-center gap-2"
-                      onClick={() => 
-                        addToCart({
-                          id: item.id,
-                          name: item.product_name, // Map product_name to name
-                          price: item.product_price, // Map product_price to price
-                          image_url: item.product_image || "/fallback-image.png", // Ensure an image URL is provided
-                          description: "" // Provide an empty description if it's missing
-                        })
-                      }
-                    >
-                      🛒 Add to Cart
-                    </button>
                   </div>
                 ))}
               </div>
@@ -147,4 +122,5 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
     </div>
   );
 };
+
 export default Wishlist;
