@@ -103,7 +103,7 @@ const UserProfile: React.FC = () => {
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-3xl text-left">
           {activeTab === "info" && (
             <div>
-              <h2 className="text-3xl font-bold text-green-200 mb-6">USER INFORMATION</h2>
+              <h2 className="text-3xl font-bold text-blue-200 mb-6">USER INFORMATION</h2>
               {isEditing ? (
                 <form className="space-y-6">
                   {Object.entries(userInfo).map(([key, value]) => (

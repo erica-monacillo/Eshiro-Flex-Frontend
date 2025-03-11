@@ -155,7 +155,7 @@ const ProductPage: React.FC = () => {
   }
 
   return (
-    <div className="product-page p-6">
+      <div className="product-page p-6 bg-gradient-to-r from-black via-gray-900 to-gray-700 min-h-screen">
       {/* Product Cards Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
@@ -163,6 +163,7 @@ const ProductPage: React.FC = () => {
             key={product.id}
             className="relative bg-gray-900 border border-gray-700 rounded-2xl p-4"
           >
+  
             {/* Wishlist Button */}
             <div className="absolute top-3 right-3">
               <button

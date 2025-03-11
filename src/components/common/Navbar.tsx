@@ -13,8 +13,6 @@ const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Helper functions to show/hide header
-  const handleMouseEnter = () => setIsHeaderVisible(true);
-  const handleMouseLeave = () => setIsHeaderVisible(false);
 
   useEffect(() => {
     const checkAuth = () => {
@@ -57,9 +55,7 @@ const Navbar: React.FC = () => {
 
   return (
     <div
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+     
     >
       {/* Header */}
       <Header isVisible={isHeaderVisible} />

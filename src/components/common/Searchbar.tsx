@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -13,35 +14,58 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
   const searchRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate(); // For navigation
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch products when the search bar is first opened
-  useEffect(() => {
-    const fetchProducts = async () => {
-      if (products.length > 0) return; // Avoid unnecessary API calls
+  // Fetch products dynamically based on search input
+  const fetchProducts = async (searchTerm: string) => {
+    if (searchTerm.length < 2) {
+      setProducts([]); // Clear results for short queries
+      return;
+    }
 
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/products/");
-        if (!response.ok) throw new Error("Failed to fetch products");
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true);
+    setError(null);
 
-    if (isVisible) fetchProducts();
-  }, [isVisible, products]);
+    try {
+      const token = localStorage.getItem("token"); // Get token from local storage
 
-  // Handle click outside to close search bar
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/search/?q=${searchTerm}`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to fetch products");
+      const data = await response.json();
+
+      // Ensure the response contains valid product data
+      if (!Array.isArray(data)) throw new Error("Invalid data format from API");
+
+      setProducts(data);
+    } catch (err) {
+      setError((err as Error).message);
+      setProducts([]); // Clear results on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+    fetchProducts(value);
+  };
+
+  // Handle clicking outside to close search
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -62,29 +86,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
     };
   }, [isVisible, handleClickOutside]);
 
-  // Handle search filtering
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    setQuery(value);
-
-    if (value === "") {
-      setFilteredProducts([]);
-    } else {
-      setFilteredProducts(
-        products.filter((product) =>
-          product.name.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-    }
-  };
-
   if (!isVisible) return null;
 
   return (
     <div
       ref={searchRef}
       className="fixed top-3 left-1/2 transform -translate-x-1/2 w-2/3 sm:w-1/3 
-                 bg-white/5 backdrop-blur-xl shadow-2xl rounded-full flex flex-col px-3 py-2 
+                 bg-white/10 backdrop-blur-lg shadow-2xl rounded-xl flex flex-col px-3 py-2 
                  border border-white/20 z-50 overflow-hidden"
     >
       <div className="flex items-center w-full relative">
@@ -102,16 +110,23 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
       </div>
 
       {/* Search Results */}
-      {filteredProducts.length > 0 && (
+      {loading && <p className="text-white text-sm text-center mt-2">Loading...</p>}
+
+      {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+
+      {products.length > 0 && !loading && (
         <ul
-          className="w-full mt-2 bg-white/5 backdrop-blur-xl shadow-lg border border-white/10 
-                     rounded-2xl max-h-48 overflow-auto transition-all duration-200 ease-in-out"
+          className="w-full mt-2 bg-gray-900 border border-gray-700 rounded-lg 
+                     max-h-48 overflow-auto shadow-lg"
         >
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <li
               key={product.id}
-              className="p-2 text-white hover:bg-white/20 cursor-pointer transition-colors duration-150"
-              onClick={() => alert(`Selected: ${product.name}`)}
+              className="p-2 text-white hover:bg-gray-700 cursor-pointer transition-colors duration-150"
+              onClick={() => {
+                navigate(`/products/${product.id}`); // Navigate to product details page
+                onClose(); // Close search bar after clicking
+              }}
             >
               {product.name}
             </li>
@@ -119,8 +134,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isVisible, onClose }) => {
         </ul>
       )}
 
-      {/* Error message */}
-      {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+      {!loading && query.length > 1 && products.length === 0 && (
+        <p className="text-white text-sm text-center mt-2">No products found.</p>
+      )}
     </div>
   );
 };

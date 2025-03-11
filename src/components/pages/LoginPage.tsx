@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "@/api/axiosInstance"; // ✅ Import the login function
+import { login } from "@/api/axiosInstance"; // Ensure this function returns { token, user_id }
 import "@/index.css";
 
 const LoginPage: React.FC = () => {
@@ -9,47 +9,45 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // ✅ Redirect if already logged in
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
-    const userId = localStorage.getItem("user_id");
-  
-    if (authToken && userId) {
-      navigate("/profile");
+    const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+    if (isAuthenticated) {
+      navigate("/"); // Redirect to home page (AestheticShop)
     }
   }, [navigate]);
-  
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-  
+
     if (!username || !password) {
       setError("Please enter both username and password");
       return;
     }
-  
+
     try {
-      const response = await login(username, password); // Ensure it includes { token, user_id }
-  
+      const response = await login(username, password); // Make sure it returns { token, user_id }
+
       if (response && response.token && response.user_id) {
-        // ✅ Store both token and user_id in localStorage
+        // ✅ Store authentication state
         localStorage.setItem("authToken", response.token);
-        localStorage.setItem("user_id", response.user_id.toString()); // Store user_id
-  
-        navigate("/shop"); // Redirect on success
+        localStorage.setItem("user_id", response.user_id.toString());
+        localStorage.setItem("isAuthenticated", "true"); // Ensures App.tsx recognizes login
+
+        navigate("/"); // Redirect to homepage
       } else {
         setError("Invalid login response. Please try again.");
       }
     } catch (error: unknown) {
-      setError((error as Error).message);
+      setError("Login failed. Please check your credentials and try again.");
     }
   };
-  
-  
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen md:flex-row">
-           {/* Logo Section (Hidden on Small Screens) */}
-      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
 
+  return (
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-r from-black via-gray-900 to-gray-700 p-4">
+      {/* Logo Section (Hidden on Small Screens) */}
+      <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
         <div className="w-[250px] h-[250px] flex items-center justify-center">
           <div className="logo-wrapper">
             <div className="logo-face front">
@@ -67,22 +65,23 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
+
       {/* Login Form Section */}
       <div className="p-8 rounded-2xl shadow-2xl w-full max-w-sm md:w-1/2 lg:w-2/5" style={{
         background: "linear-gradient(to bottom, #121212, #383838)",
         border: "1px solid #444",
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)",
       }}>
-        <h2 className="text-3xl font-extrabold mb-6 text-center text-white">Log In</h2>
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-white">LOG IN</h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-white">Email or Username</label>
-            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full border border-gray-300  text-black rounded-md p-2 mt-1" />
+            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full border border-gray-300 text-black rounded-md p-2 mt-1" />
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border border-gray-300  text-black rounded-md p-2 mt-1" />
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border border-gray-300 text-black rounded-md p-2 mt-1" />
           </div>
           <button type="submit" className="w-full py-3 px-4 rounded-lg font-bold text-white" style={{
             backgroundImage: "linear-gradient(to right, #6a11cb, #2575fc)",

@@ -188,7 +188,7 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
         <div className="w-full max-w-[100rem] flex gap-12">
           
           {/* 🛍️ Extra-Wide Cart Items */}
-          <div className="w-4/5 bg-gray-800 rounded-lg shadow-lg p-10">
+          <div className="w-4/5 bg-gray-900 rounded-lg shadow-lg p-10">
             {cartItems.length > 0 ? (
               cartItems.map((item) => (
                 <div 
@@ -249,7 +249,7 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
           </div>
   
           {/* 📦 Order Summary */}
-          <div className="w-1/5 bg-gray-800 rounded-lg shadow-lg p-8">
+            <div className="w-1/5 bg-gray-900 rounded-lg shadow-lg p-8">
             <h3 className="text-2xl font-semibold text-gray-200 mb-6">Order Summary</h3>
             <p className="text-gray-400 text-lg">Subtotal</p>
             <p className="text-gray-200 font-semibold text-2xl">₱{total.toFixed(2)}</p>

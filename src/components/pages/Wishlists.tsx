@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import type { WishlistItem } from "./wishlistTypes";
 interface Product {
   id: number;
   name: string;
@@ -9,13 +9,6 @@ interface Product {
   description: string;
 }
 
-interface WishlistItem {
-  id: number;
-  product_name: string;
-  product_price: string;
-  product_image?: string;
-  store_name?: string;
-}
 
 interface WishlistProps {
   wishlistItems: WishlistItem[];
@@ -80,7 +73,7 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlistItems, setWishlistItems }) 
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex justify-center items-center p-8">
+    <div className="min-h-screen bg-gradient-to-r from-black via-gray-900 to-gray-700 flex justify-center items-center p-8">
       <div className="w-full max-w-4xl bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 shadow-lg rounded-lg p-6">
         <h2 className="text-3xl font-semibold text-center text-gray-100 mb-6">Your Wishlist</h2>
         {loading ? (

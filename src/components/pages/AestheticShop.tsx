@@ -4,17 +4,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../common/Navbar";
 import HeroSection from "../ui/HeroSection";
-import Categories from "../ui/categories";
 import WhatsNew from "./WhatsNew";
 import ProductCard from "../ui/ProductCard";
-import Footer from "../common/Footer";
 import LoginPage from "./LoginPage";
 import SignUpPage from "./SignUpPage";
-import CategoryPage from "../ui/CategoryPage";
 import CartPage from "./CartPage";
 import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
-import Wishlist from "./Wishlist";
+import Wishlist from "./Wishlists";
 import { fetchProducts } from "../../api/apiService"; // Import API call function
 import ProductPage from "../pages/ProductPage";
 
@@ -166,7 +163,6 @@ const AestheticShop: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <Footer />
     </div>
   );
 };
