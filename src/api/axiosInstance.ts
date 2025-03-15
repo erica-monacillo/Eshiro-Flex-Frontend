@@ -2,11 +2,12 @@ import axios from "axios";
 
 // Create an axios instance with the base URL
 const api = axios.create({
-  baseURL: "http://eshiroflex.zapto.org/api", // Replace with your actual API base URL
+  baseURL: `http://${import.meta.env.VITE_API_URL}/api`, // Dynamically load from .env
   headers: {
     "Content-Type": "application/json",
   },
 });
+
 
 // Add an interceptor to include the Authorization token in headers
 api.interceptors.request.use(
