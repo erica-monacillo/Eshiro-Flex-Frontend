@@ -72,7 +72,7 @@ const ProductPage: React.FC = () => {
         }
   
         const response = await axios.post(
-          'http://127.0.0.1:8000/api/wishlist/',
+          'https://127.0.0.1:8000/api/wishlist/',
           { product: product.id },
           {
             headers: {
@@ -121,7 +121,7 @@ const ProductPage: React.FC = () => {
       }
   
       const response = await axiosInstance.post(
-        "http://127.0.0.1:8000/api/cart/",
+        "https://127.0.0.1:8000/api/cart/",
         {
           product_id: product.id,
           quantity: 1,
