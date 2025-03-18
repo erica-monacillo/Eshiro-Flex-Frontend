@@ -12,6 +12,7 @@ const UserProfile: React.FC = () => {
     payment_method: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const UserProfile: React.FC = () => {
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
-        navigate("/login");
+        setError("Failed to fetch user profile. Please ensure your profile is set up.");
       }
     };
 
@@ -58,6 +59,7 @@ const UserProfile: React.FC = () => {
       setIsEditing(false);
     } catch (error) {
       console.error("Error saving user information:", error);
+      setError("Failed to update user information. Please try again.");
     }
   };
 
