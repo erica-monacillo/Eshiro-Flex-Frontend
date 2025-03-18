@@ -70,6 +70,11 @@ const UserProfile: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-gray-900 to-black font-inter">
+      {error && (
+        <div className="mb-4 p-4 bg-red-500 text-white rounded-lg">
+          {error}
+        </div>
+      )}
       <aside className="w-1/4 bg-gray-800 text-white flex flex-col">
         <div className="p-6 border-b border-gray-700 text-center">
           <h1 className="text-3xl font-bold">Profile</h1>
