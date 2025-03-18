@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create an axios instance with the base URL
 const api = axios.create({
-  baseURL: `http://${import.meta.env.VITE_API_URL}/api`, // Dynamically load from .env
+  baseURL: `${import.meta.env.VITE_API_URL}/api`, // Dynamically load from .env
   headers: {
     "Content-Type": "application/json",
   },
