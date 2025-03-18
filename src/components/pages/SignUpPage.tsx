@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import api from "@/api/axiosInstance";
+import axios from "axios";
 
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -23,11 +24,7 @@ const SignUpPage: React.FC = () => {
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/register/", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api.post("/register/", formData);
       console.log("Registration successful:", response.data);
       navigate("/login"); // Redirect to the login page after successful sign-up
     } catch (error: unknown) {
@@ -47,7 +44,6 @@ const SignUpPage: React.FC = () => {
     <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-r from-black via-gray-900 to-gray-700 p-4">
       {/* Logo Section (Hidden on Small Screens) */}
       <div className="hidden md:flex items-center justify-center md:w-1/2 lg:w-2/5 min-h-[300px]">
-
         <div className="w-[250px] h-[250px] flex items-center justify-center">
           <div className="logo-wrapper">
             <div className="logo-face front">
