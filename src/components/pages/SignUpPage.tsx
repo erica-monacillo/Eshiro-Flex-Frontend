@@ -6,14 +6,16 @@ import axios from "axios";
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({
     email: "",
-    username: "",
+    full_name: "",
+    cellphone_number: "",
+    complete_address: "",
     password: "",
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -23,7 +25,6 @@ const SignUpPage: React.FC = () => {
 
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("Form Data:", formData); // Log the form data
     try {
       const response = await api.post("/register/", formData);
       console.log("Registration successful:", response.data);
@@ -75,22 +76,32 @@ const SignUpPage: React.FC = () => {
           Sign Up
         </h2>
         <form className="w-full" onSubmit={handleSignUp}>
-          {["email", "username", "password"].map((field, index) => (
+          {["email", "full_name", "cellphone_number", "complete_address", "password"].map((field, index) => (
             <div key={index} className="mb-4">
               <label
                 htmlFor={field}
                 className="block text-sm font-medium text-white capitalize"
               >
-                {field}
+                {field.replace('_', ' ')}
               </label>
-              <input
-                type={field === "password" ? "password" : "text"}
-                id={field}
-                name={field}
-                value={formData[field as keyof typeof formData]}
-                onChange={handleChange}
-                className="w-full border border-gray-300 text-black rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500"
-              />
+              {field === "complete_address" ? (
+                <textarea
+                  id={field}
+                  name={field}
+                  value={formData[field as keyof typeof formData]}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 text-black rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <input
+                  type={field === "password" ? "password" : "text"}
+                  id={field}
+                  name={field}
+                  value={formData[field as keyof typeof formData]}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 text-black rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500"
+                />
+              )}
             </div>
           ))}
           {errorMessage && (
