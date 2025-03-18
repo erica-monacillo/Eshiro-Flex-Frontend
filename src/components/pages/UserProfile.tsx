@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "@/api/axiosInstance";
 
 const UserProfile: React.FC = () => {
   const [activeTab, setActiveTab] = useState("info");
@@ -22,23 +23,13 @@ const UserProfile: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/profile/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${authToken}`,
-          },
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch user profile");
-
-        const data = await response.json();
+        const response = await api.get("/profile/");
         setUserInfo({
-          full_name: data.full_name || "N/A",
-          complete_address: data.complete_address || "N/A",
-          email: data.email || "N/A",
-          cellphone_number: data.cellphone_number || "N/A",
-          payment_method: data.payment_method || "N/A",
+          full_name: response.data.full_name || "N/A",
+          complete_address: response.data.complete_address || "N/A",
+          email: response.data.email || "N/A",
+          cellphone_number: response.data.cellphone_number || "N/A",
+          payment_method: response.data.payment_method || "N/A",
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -62,17 +53,7 @@ const UserProfile: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/profile/", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${authToken}`,
-        },
-        body: JSON.stringify(userInfo),
-      });
-
-      if (!response.ok) throw new Error("Failed to update user information");
-
+      await api.put("/profile/", userInfo);
       alert("User information updated successfully!");
       setIsEditing(false);
     } catch (error) {
