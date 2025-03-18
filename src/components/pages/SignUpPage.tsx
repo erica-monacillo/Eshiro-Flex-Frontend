@@ -23,6 +23,7 @@ const SignUpPage: React.FC = () => {
 
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log("Form Data:", formData); // Log the form data
     try {
       const response = await api.post("/register/", formData);
       console.log("Registration successful:", response.data);
