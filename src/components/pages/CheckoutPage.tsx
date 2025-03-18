@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import api from "@/api/axiosInstance";
 import axios from "axios";
 
 export interface User {
@@ -31,7 +32,6 @@ interface APIOrderItem {
   quantity: number;
 }
 
-
 const CheckoutPage: React.FC = () => {
   const location = useLocation();
   const { orderId } = location.state || {};
@@ -55,34 +55,13 @@ const CheckoutPage: React.FC = () => {
     }
 
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("user_id");
-
-      console.log("Token:", token);
-      console.log("User ID:", userId);
-
-
-      if (!token || !userId) {
-        console.error("Missing token or user_id in localStorage");
-        setError("Unauthorized: Missing authentication token or user ID.");
-        setLoading(false);
-        return;
-      }
-
       try {
         // Fetch User Data
-        const userResponse = await axios.get(
-          `http://127.0.0.1:8000/api/profile/`,
-          { headers: { Authorization: `Token ${token}` } }
-        );
+        const userResponse = await api.get("/profile/");
         setUser(userResponse.data);
 
         // Fetch Order Items
-        const orderResponse = await axios.get(
-          `http://127.0.0.1:8000/api/order-items/${orderId}/`,
-          { headers: { Authorization: `Token ${token}` } }
-        );
-
+        const orderResponse = await api.get(`/order-items/${orderId}/`);
         console.log("Order Items:", orderResponse.data);
 
         setOrderItems(
@@ -93,13 +72,10 @@ const CheckoutPage: React.FC = () => {
             image_Url: item.image, // ✅ Matches `OrderItem`
             quantity: item.quantity,
           }))
-        );                       
+        );
 
         // Fetch Order Details
-        const orderDetailsResponse = await axios.get(
-          `http://127.0.0.1:8000/api/orders/${orderId}/`,
-          { headers: { Authorization: `Token ${token}` } }
-        );
+        const orderDetailsResponse = await api.get(`/orders/${orderId}/`);
         setOrderDetails(orderDetailsResponse.data);
 
         setLoading(false);
