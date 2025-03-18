@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
-import axiosInstance from "@/api/axiosInstance"; // Import the axios instance
 import { toast } from "react-toastify";
-import axios from "axios";
-//import { useNavigate } from "react-router-dom";
-
+import api from "@/api/axiosInstance"; // Import the axios instance
 
 // Define the Product interface
 interface Product {
@@ -31,24 +28,15 @@ const ProductPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [wishlist] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
-  const [addedStatus] = useState<Record<string, boolean>>({});; // Track each product's added status to cart
+  const [addedStatus] = useState<Record<string, boolean>>({}); // Track each product's added status to cart
   const [wishlistStatus, setWishlistStatus] = useState<Record<string, boolean>>({}); // Track each product's wishlist status
   const [wishlistItems, setWishlistItems] = useState<CartItem[]>([]); // Define type for wishlistItems
- // const navigate = useNavigate(); // Use `useNavigate` in React Router v6
 
   // Fetch products from the backend API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const token = localStorage.getItem("token");
-        console.log("Token from localStorage:", token);
-
-        const response = await axiosInstance.get("/products/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
-
+        const response = await api.get("/products/");
         console.log("Fetched products:", response.data);
         setProducts(response.data);
       } catch (error) {
@@ -65,25 +53,9 @@ const ProductPage: React.FC = () => {
   const handleAddToWishlist = async (product: Product) => {
     if (!wishlistStatus[product.name]) {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          toast.error('Please log in to add items to your wishlist.');
-          return;
-        }
-  
-        const response = await axios.post(
-          'http://127.0.0.1:8000/api/wishlist/',
-          { product: product.id },
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
-  
-        // Optional: Log response for debugging or handle it if needed
+        const response = await api.post("/wishlist/", { product: product.id });
         console.log(response.data);
-  
+
         const item: CartItem = {
           id: product.id.toString(),  // Convert product.id to string
           productName: product.name,
@@ -91,16 +63,16 @@ const ProductPage: React.FC = () => {
           imageSrc: product.image_url,
           quantity: 1,
         };
-  
+
         const updatedWishlist = [...wishlistItems, item];
         setWishlistItems(updatedWishlist);
         localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
-  
+
         setWishlistStatus((prevStatus) => ({
           ...prevStatus,
           [product.name]: true,
         }));
-  
+
         toast.success(`${product.name} added to wishlist!`);
       } catch (error) {
         console.error('Error adding to wishlist:', error);
@@ -114,26 +86,11 @@ const ProductPage: React.FC = () => {
   // Add product to cart
   const handleAddToCart = async (product: Product) => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("You must be logged in to add items to the cart.");
-        return;
-      }
-  
-      const response = await axiosInstance.post(
-        "http://127.0.0.1:8000/api/cart/",
-        {
-          product_id: product.id,
-          quantity: 1,
-        },
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
+      const response = await api.post("/cart/", {
+        product_id: product.id,
+        quantity: 1,
+      });
+
       if (response.status === 201 || response.status === 200) {
         toast.success(`${product.name} added to cart!`);
       } else {
@@ -153,6 +110,7 @@ const ProductPage: React.FC = () => {
   if (products.length === 0) {
     return <p className="text-center text-gray-500">No products available.</p>;
   }
+
 
   return (
       <div className="product-page p-6 bg-gradient-to-r from-black via-gray-900 to-gray-700 min-h-screen">
