@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { CartItem } from "./cartTypes";
+import api from "@/api/axiosInstance";
 
 interface CartPageProps {
   cartItems: CartItem[];
@@ -18,16 +18,7 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError("Unauthorized: No token found.");
-          setLoading(false);
-          return;
-        }
-
-        const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
-          headers: { Authorization: `Token ${token}` },
-        });
+        const response = await api.get("/cart/");
         console.log("Cart API Response:", response.data);
 
         const formattedCartItems = response.data.map((item: { 
@@ -62,20 +53,11 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
 
   // Handle quantity change
   const handleQuantityChange = async (id: number, increment: boolean) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("Unauthorized: No Token Found.");
-      return;
-    }
     try {
       const updatedQuantity = cartItems.find((item) => item.id === id)?.quantity || 1;
       const newQuantity = Math.max(1, updatedQuantity + (increment ? 1 : -1));
 
-      await axios.put(
-        `http://127.0.0.1:8000/api/cart/${id}/`,
-        { quantity: newQuantity },
-        { headers: { Authorization: `Token ${token}` } }
-      );
+      await api.put(`/cart/${id}/`, { quantity: newQuantity });
 
       setCartItems((prevItems) =>
         prevItems.map((item) =>
@@ -96,15 +78,8 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   
   // Handle remove from cart
   const handleRemove = async (id: number) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("Unauthorized: No Token Found.");
-      return;
-    }
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/cart/${id}/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
+      await api.delete(`/cart/${id}/`);
 
       setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
       setSelectedItems((prevSelected) => prevSelected.filter((itemId) => itemId !== id));
@@ -116,24 +91,19 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
   // Handle Checkout
   const handleCheckout = async () => {
     try {
-      const token = localStorage.getItem("token");
       const userId = localStorage.getItem("user_id");
   
-      if (!token || !userId) {
-        console.error("Token or User ID missing:", { token, userId });
+      if (!userId) {
+        console.error("User ID missing:", userId);
         alert("Missing authentication details.");
         return;
       }
   
       // Send the total price along with the order data
-      const orderResponse = await axios.post(
-        "http://127.0.0.1:8000/api/orders/",
-        {
-          user_id: userId,
-          total_price: total,  // Send the calculated total price
-        },
-        { headers: { Authorization: `Token ${token}` } }
-      );
+      const orderResponse = await api.post("/orders/", {
+        user_id: userId,
+        total_price: total,  // Send the calculated total price
+      });
   
       const orderId = orderResponse.data.id;
       console.log("Order Created:", orderId);
@@ -143,15 +113,11 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
         selectedItems.map(async (cartItemId) => {
           const item = cartItems.find((item) => item.id === cartItemId); // Find item by cart ID
           if (item) {
-            await axios.post(
-              "http://127.0.0.1:8000/api/api/order-items/create/",
-              {
-                order_id: orderId,
-                product_id: item.product_id, // Use the correct product_id
-                quantity: item.quantity,
-              },
-              { headers: { Authorization: `Token ${token}` } }
-            );
+            await api.post("/order-items/create/", {
+              order_id: orderId,
+              product_id: item.product_id, // Use the correct product_id
+              quantity: item.quantity,
+            });
           }
         })
       );
@@ -169,7 +135,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       console.error("Checkout error:", error);
     }
   };
-  
 
   const total: number = selectedItems.reduce((acc, id) => {
     const item = cartItems.find((item) => item.id === id);
