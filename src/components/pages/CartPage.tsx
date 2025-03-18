@@ -130,6 +130,7 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       );
   
       // Navigate to checkout page with orderId
+      console.log("Navigating to checkout with orderId:", orderId);
       navigate("/checkout", { state: { orderId } });
     } catch (error) {
       console.error("Checkout error:", error);
