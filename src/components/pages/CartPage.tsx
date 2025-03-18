@@ -108,6 +108,10 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       const orderId = orderResponse.data.id;
       console.log("Order Created:", orderId);
   
+      // Navigate to checkout page with orderId
+      console.log("Navigating to checkout with orderId:", orderId);
+      navigate("/checkout", { state: { orderId } });
+  
       // Add selected items to the order
       await Promise.all(
         selectedItems.map(async (cartItemId) => {
@@ -128,10 +132,6 @@ const CartPage: React.FC<CartPageProps> = ({ cartItems, setCartItems }) => {
       setCartItems((prevItems) =>
         prevItems.filter((item) => !selectedItems.includes(item.id))
       );
-  
-      // Navigate to checkout page with orderId
-      console.log("Navigating to checkout with orderId:", orderId);
-      navigate("/checkout", { state: { orderId } });
     } catch (error) {
       console.error("Checkout error:", error);
     }
