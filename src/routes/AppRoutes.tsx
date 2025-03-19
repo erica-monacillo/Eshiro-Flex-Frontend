@@ -46,4 +46,4 @@ export default AppRoutes;
 
 export const shouldHideNavbar = (pathname: string): boolean => {
   return pathname === "/login" || pathname === "/signup";
-};
+}; 

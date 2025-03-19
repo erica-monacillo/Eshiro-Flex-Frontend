@@ -4,6 +4,7 @@ interface HeaderProps {
   isVisible: boolean;
 }
 
+
 const HEADER_CLASS =
   "absolute top-0 left-0 w-full h-16 z-20 flex items-center text-primary-foreground bg-gradient-to-r from-black via-gray-900 to-gray-700";
 
