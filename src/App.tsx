@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/common/Header";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
-
 import AestheticShop from "./components/pages/AestheticShop";
 import ProductDetails from "./components/pages/ProductDetails";
 import CartPage from "./components/pages/CartPage";
@@ -16,8 +15,8 @@ import WhatsNew from "./components/pages/WhatsNew";
 import CheckoutPage from "./components/pages/CheckoutPage";
 import "./index.css";
 
-import type { CartItem } from "./components/pages/cartTypes";
-import type { WishlistItem } from "./components/pages/wishlistTypes";
+import type { CartItem } from "./hooks/cartTypes";
+import type { WishlistItem } from "./hooks/wishlistTypes";
 
 const AppContent: React.FC = () => {
   const location = useLocation(); // Get the current route

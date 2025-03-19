@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import api from "@/api/axiosInstance";
+import api from "@/api/services/axiosInstance";
 import axios from "axios";
 
 export interface User {

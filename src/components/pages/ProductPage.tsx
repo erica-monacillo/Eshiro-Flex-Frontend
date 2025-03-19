@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { toast } from "react-toastify";
-import api from "@/api/axiosInstance"; // Import the axios instance
+import api from "@/api/services/axiosInstance"; // Import the axios instance
 
 // Define the Product interface
 interface Product {

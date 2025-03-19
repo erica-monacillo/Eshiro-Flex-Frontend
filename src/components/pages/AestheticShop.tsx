@@ -12,10 +12,10 @@ import CartPage from "./CartPage";
 import UserProfile from "./UserProfile";
 import CheckoutPage from "./CheckoutPage";
 import Wishlist from "./Wishlists";
-import { fetchProducts } from "../../api/apiService"; // Import API call function
-import ProductPage from "../pages/ProductPage";
-import { WishlistItem } from "../pages/wishlistTypes"; // Adjust the path accordingly
-import { CartItem } from "../pages/cartTypes";
+import { fetchProducts } from "../../api/services/apiService"; // Import API call function
+import ProductPage from "./ProductPage";
+import { WishlistItem } from "../../hooks/wishlistTypes"; // Adjust the path accordingly
+import { CartItem } from "../../hooks/cartTypes";
 
 
 // Product interface

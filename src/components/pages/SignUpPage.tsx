@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "@/api/axiosInstance";
+import api from "@/api/services/axiosInstance";
 import axios from "axios";
 
 const SignUpPage: React.FC = () => {
