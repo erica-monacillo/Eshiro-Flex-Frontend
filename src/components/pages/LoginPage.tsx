@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "@/api/axiosInstance"; // Ensure this function returns { token, user_id }
 import "@/index.css";
+import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
+  
+  // Fix: Call the useMutationLogin function to get the mutation result
+  const { useMutationLogin } = useMutationAuth();
+  const { mutate } = useMutationLogin();
+  
   // ✅ Redirect if already logged in
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
@@ -16,34 +20,17 @@ const LoginPage: React.FC = () => {
       navigate("/"); // Redirect to home page (AestheticShop)
     }
   }, [navigate]);
-
+  
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
+    
     if (!username || !password) {
       setError("Please enter both username and password");
       return;
     }
-
-    try {
-      const response = await login(username, password); // Make sure it returns { token, user_id }
-
-      if (response && response.token && response.user_id) {
-        // ✅ Store authentication state
-        localStorage.setItem("authToken", response.token);
-        localStorage.setItem("user_id", response.user_id.toString());
-        localStorage.setItem("isAuthenticated", "true"); // Ensures App.tsx recognizes login
-
-        navigate("/"); // Redirect to homepage
-      } else {
-        setError("Invalid login response. Please try again.");
-      }
-    } catch (error: unknown) {
-      console.error("Login error:", error); // Log the error
-      setError("Login failed. Please check your credentials and try again.");
-    }
     
+    mutate({ username, password });
   };
 
   return (
