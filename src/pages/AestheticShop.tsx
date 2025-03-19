@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Navbar from "../common/Navbar";
-import HeroSection from "../ui/HeroSection";
-import WhatsNew from "./WhatsNew";
-import ProductCard from "../ui/ProductCard";
-import LoginPage from "./LoginPage";
-import SignUpPage from "./SignUpPage";
-import CartPage from "./CartPage";
-import UserProfile from "./UserProfile";
-import CheckoutPage from "./CheckoutPage";
-import Wishlist from "./Wishlists";
-import { fetchProducts } from "../../api/services/apiService"; // Import API call function
-import ProductPage from "./ProductPage";
-import { WishlistItem } from "../../hooks/wishlistTypes"; // Adjust the path accordingly
-import { CartItem } from "../../hooks/cartTypes";
+import Navbar from "../components/common/Navbar";
+import HeroSection from "../components/ui/HeroSection";
+import WhatsNew from "./product/WhatsNew";
+import ProductCard from "../components/ui/ProductCard";
+import LoginPage from "./authentication/LoginPage";
+import SignUpPage from "./authentication/SignUpPage";
+import CartPage from "./cart/CartPage";
+import UserProfile from "./user/UserProfile";
+import CheckoutPage from "./cart/CheckoutPage";
+import Wishlist from "./cart/Wishlists";
+import { fetchProducts } from "../api/services/apiService"; // Import API call function
+import ProductPage from "./product/ProductPage";
+import { WishlistItem } from "../hooks/wishlistTypes"; // Adjust the path accordingly
+import { CartItem } from "../hooks/cartTypes";
 
 
 // Product interface

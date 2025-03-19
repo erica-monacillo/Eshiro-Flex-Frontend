@@ -1,15 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import AestheticShop from "../components/pages/AestheticShop";
-import ProductDetails from "../components/pages/ProductDetails";
-import CartPage from "../components/pages/CartPage";
-import Wishlists from "../components/pages/Wishlists";
-import LoginPage from "../components/pages/LoginPage";
-import ProductPage from "../components/pages/ProductPage";
-import SignUpPage from "../components/pages/SignUpPage";
-import UserProfile from "../components/pages/UserProfile";
-import WhatsNew from "../components/pages/WhatsNew";
-import CheckoutPage from "../components/pages/CheckoutPage";
+import AestheticShop from "../pages/AestheticShop";
+import ProductDetails from "../pages/product/ProductDetails";
+import CartPage from "../pages/cart/CartPage";
+import Wishlists from "../pages/cart/Wishlists";
+import LoginPage from "../pages/authentication/LoginPage";
+import ProductPage from "../pages/product/ProductPage";
+import SignUpPage from "../pages/authentication/SignUpPage";
+import UserProfile from "../pages/user/UserProfile";
+import WhatsNew from "../pages/product/WhatsNew";
+import CheckoutPage from "../pages/cart/CheckoutPage";
 import type { CartItem } from "../hooks/cartTypes";
 import type { WishlistItem } from "../hooks/wishlistTypes";
 
